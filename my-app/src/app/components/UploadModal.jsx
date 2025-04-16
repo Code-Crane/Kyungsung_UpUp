@@ -9,17 +9,47 @@ export default function UploadModal({ onClose, onCreate }) {
   const [desc, setDesc] = useState('');
   const [file, setFile] = useState(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name.trim()) {
       alert('폴더 이름을 입력해주세요.');
       return;
     }
-
-    const newFolder = {
-      name,
-      description: desc,
-      file, // 전체 파일의 객체를 넘긴다(file.name 포함)
-    };
+  
+    if (!file) {
+      alert('파일을 첨부해주세요.');
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    try {
+      const res = await fetch("3.148.139.172:8000/upload", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!res.ok) {
+        throw new Error("서버 응답 실패");
+      }
+  
+      const data = await res.json();
+  
+      const newFolder = {
+        name,
+        description: desc,
+        file,           // 원본 파일
+        filename: data.filename, // 백엔드에서 받은 파일 이름
+        text: data.text,         // 추출된 텍스트
+      };
+  
+      onCreate(newFolder);
+      onClose();
+  
+    } catch (err) {
+      console.error("파일 업로드 오류:", err);
+      alert("파일 업로드에 실패했습니다.");
+    }
 
     onCreate(newFolder);
     onClose();
