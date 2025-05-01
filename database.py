@@ -9,7 +9,7 @@ Base = declarative_base()
 # .env 파일 불러오기
 load_dotenv()
 
-USE_FAKE_DB = True  # 실제 DB 사용 여부 (True: Fake DB, False: 실제 DB)
+USE_FAKE_DB = False  # 실제 DB 사용 여부 (True: Fake DB, False: 실제 DB)
 if not USE_FAKE_DB:
 # .env에서 정보 가져오기
     DB_USER = os.getenv("DB_USER")
