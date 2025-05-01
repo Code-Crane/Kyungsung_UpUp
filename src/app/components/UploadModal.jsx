@@ -21,10 +21,15 @@ export default function UploadModal({ onClose, onCreate }) {
     }
   
     const formData = new FormData();
-    formData.append("file", file);
-  
+    formData.append("file", file);              // 파일 업로드
+    formData.append("lecture_name", name);      // 폴더 이름  
     try {
-      const res = await fetch("3.148.139.172:8000/upload", {
+      //const res = await fetch("3.148.139.172:8000/upload", {   EC2 AWS 서버 주소
+      // const res = await fetch("http://localhost:8000/upload", {
+      //   method: "POST",
+      //   body: formData,
+      // });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/upload/`, {
         method: "POST",
         body: formData,
       });
@@ -51,8 +56,6 @@ export default function UploadModal({ onClose, onCreate }) {
       alert("파일 업로드에 실패했습니다.");
     }
 
-    onCreate(newFolder);
-    onClose();
   };
 
   return (
