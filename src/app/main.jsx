@@ -17,7 +17,7 @@ export default function Main() {
       const query = new URLSearchParams({
         name: folder.name,                        // 폴더이름
         description: folder.description || '',     // 폴더설명
-        file: folder.file?.name || '',            // 파일이름 (file.name추출)
+        file: folder.filename || '',            // 파일이름 (file.name추출)
       }).toString();
     
       router.push(`/filelist?${query}`);
