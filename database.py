@@ -28,6 +28,7 @@ if not USE_FAKE_DB:
 else:
     engine = None
     SessionLocal = None
+    Base = object
 
 # # DB 엔진 & 세션 설정
 # engine = create_engine(DATABASE_URL, echo=True)
