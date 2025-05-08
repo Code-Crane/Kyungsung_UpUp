@@ -17,7 +17,7 @@ export default function FileList() {
   const handleOpenFile = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://3.148.139.172:8000/file/${fileName}`);
+      const response = await fetch(`http://3.148.139.172:8000/file/${fileId}`); // DB에 파일저장되도록 값 수정
       if (!response.ok) {
         alert('파일 불러오기에 실패했습니다.');
         setIsLoading(false);
