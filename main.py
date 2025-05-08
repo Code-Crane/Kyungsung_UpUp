@@ -1,4 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Form, Depends, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import uuid
 from sqlalchemy.orm import Session
@@ -7,7 +9,6 @@ from models import Base, UploadedFile
 from extract_text import extract_text
 from gpt_generator import generate_quiz_from_text
 from routers import quiz_submit
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -23,8 +24,7 @@ app.add_middleware(
 # ✅ 라우터 등록
 app.include_router(quiz_submit.router)
 
-# ✅ 테이블 자동 생성 (DB 연결이 설정돼 있을 때만)
-# Base.metadata.create_all(bind=engine)
+# ✅ 테이블 자동 생성
 if engine:
     Base.metadata.create_all(bind=engine)
 
@@ -33,12 +33,6 @@ UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # ✅ DB 세션 의존성 주입
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
 def get_db():
     if SessionLocal is None:
         yield None
@@ -68,21 +62,11 @@ async def upload_file(
         raise HTTPException(status_code=400, detail="텍스트 추출에 실패했습니다.")
 
     # 3. DB 저장
-    # db_file = UploadedFile(
-    #     filename=file.filename,
-    #     lecture_name=lecture_name,
-    #     extracted_text=extracted
-    # )
-    # db.add(db_file)
-    # db.commit()
-    # db.refresh(db_file)
-
     file_id = 1  # 기본값 (테스트용)
-
     if db:
         try:
             db_file = UploadedFile(
-                filename=file.filename,
+                filename=unique_filename,
                 lecture_name=lecture_name,
                 extracted_text=extracted
             )
@@ -95,14 +79,9 @@ async def upload_file(
     else:
         print("💡 테스트 모드: DB 없이 진행")
 
-    # 4. 응답
-    # return {
-    #     "file_id": db_file.id,
-    #     "message": "파일 업로드 및 텍스트 저장 완료!"
-    # }
     return {
         "file_id": file_id,
-        "filename": file.filename,
+        "filename": unique_filename,
         "text": extracted,
         "message": "파일 업로드 및 텍스트 저장 완료 (테스트 모드)" if not db else "파일 업로드 및 텍스트 저장 완료!"
     }
@@ -118,5 +97,12 @@ def generate_quiz(file_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="텍스트가 없습니다.")
 
     quiz = generate_quiz_from_text(file.extracted_text)
-
     return {"quiz": quiz}
+
+# ✅ 업로드된 파일 열기 (프론트에서 사용자가 클릭 시 다운로드/뷰용)
+@app.get("/file/{filename}")
+async def get_file(filename: str):
+    file_path = os.path.join(UPLOAD_DIR, filename)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(file_path)
