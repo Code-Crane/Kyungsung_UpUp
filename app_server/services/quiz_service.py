@@ -7,7 +7,7 @@ from app_server.services.file_service import extract_text
 
 # uploads 폴더 경로
 ROOT_DIR = Path(__file__).resolve().parents[2]
-UPLOAD_DIR = ROOT_DIR.parent / "uploads"
+UPLOAD_DIR = ROOT_DIR / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 
