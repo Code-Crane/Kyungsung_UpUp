@@ -23,7 +23,7 @@ export default function UploadModal({ onClose, onCreate }) {
     formData.append("lecture_name", name);
 
     try {
-      const data = await uploadFile(formData); // ✅ utils/api.js의 함수 호출
+      const data = await uploadFile(formData); // utils/api.js의 함수 호출
 
       const newFolder = {
         name,
@@ -57,7 +57,7 @@ export default function UploadModal({ onClose, onCreate }) {
 
         <p style={{ textAlign: 'left' }}>폴더 설명</p>
         <textarea
-          placeholder="설명 입력 (선택)"
+          placeholder="설명 입력(선택)"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           className={`${styles.input} ${styles.description}`}

@@ -1,6 +1,8 @@
 // 25.05.14 서버에서 퀴즈정보 받아와서 출력 되도록 수정
 
-import { useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '../styles/quiz.module.css';
 
@@ -9,14 +11,19 @@ export default function QuizUI({ quizData }) {
   const [selected, setSelected] = useState(null);
   const [graded, setGraded] = useState(false);
   const [explanationIndex, setExplanationIndex] = useState(null);
+  const [feedbackImage, setFeedbackImage] = useState(null);
+
+  /*유효성 검사 조건문*/
+  if (!quizData) {
+    return <div>퀴즈 데이터를 불러오는 중입니다...</div>;
+  }
 
   const { filename, question, options, explanations } = quizData;
 
   const handleSelect = (idx) => {
-  if (graded) return; // 채점 후에는 다른 보기 선택 불가
-  setSelected(idx);
-};
-
+    if (graded) return; // 채점 후에는 다른 보기 선택 불가
+    setSelected(idx);
+  };
 
   const handleGrade = () => {
     if (graded) {
@@ -26,6 +33,15 @@ export default function QuizUI({ quizData }) {
     } else if (selected !== null) {
       setGraded(true);
       setExplanationIndex(selected);
+
+      const isCorrect = options[selected].is_correct;
+      const imagePath = isCorrect ? '/image/KsYEE_YES.png' : '/image/KsYEE_NO.png'; // 문제 정답여부에 따른 이미지 렌더링
+      setFeedbackImage(imagePath);
+
+      // 2초 후 이미지 제거
+      setTimeout(() => {
+        setFeedbackImage(null);
+      }, 2000);
     }
   };
 
@@ -46,8 +62,7 @@ export default function QuizUI({ quizData }) {
         <div className={styles.options}>
           {options.map((opt, idx) => {
             const isSelected = selected === idx;
-            //const isCorrect = graded && opt.is_correct; // 오답선택 후 '채점하기' 클릭 시 정답공개 및 해설 출력
-            const isCorrect = graded && selected === idx && opt.is_correct; // 오답선택 후 '채점하기' 클릭 시 정답공개 하지않고 해설출력
+            const isCorrect = graded && selected === idx && opt.is_correct;
             const isWrong = graded && isSelected && !opt.is_correct;
 
             return (
@@ -79,6 +94,12 @@ export default function QuizUI({ quizData }) {
           </div>
         )}
       </div>
+
+      {feedbackImage && (
+        <div className={styles.feedbackOverlay}>
+          <img src={feedbackImage} alt="정답 여부" className={styles.feedbackImage} />
+        </div>
+      )}
     </div>
   );
 }

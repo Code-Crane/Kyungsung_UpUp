@@ -1,116 +1,232 @@
-/*메인 페이지에 필요한 스타일을 적용합니다.(main.jsx, 폴더생성 팝업창)*/
-/*CSS 모듈방식을 사용합니다 : 클래스명 중복 없이 안전하게 적용 가능(Next.js공식 추천 방식식)*/
+/* ✅ 메인 페이지 스타일 (회색 영역 유지 + 흰색 폴더 카드) */
 
-.wrapper {    /*화면 전체의 배경, 정렬, 크기제어 담당 컨테이너(바깥쪽 div)*/
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  /*배경 스타일*/
-  .backgroundImage {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-  }
-  
-  /*메인 중앙 */
-  .contentBox {
-    position: absolute;
-    top: 50%;   /*'중앙박스 세로정렬'*/
-    left: 50%;  /*'중앙박스 가로정렬'*/
-    transform: translate(-50%, -50%);
-    width: 700px; /*비율이 아닌 px로 선언함으로써 크기 고정(반응형으로 변경시 수정)*/
-    height: 600px;
-    background-color: rgba(255, 253, 253, 0.945);
-    border-radius: 20px;
-    border-color: 3px solid rgba(82, 80, 80, 0.911);
-    padding: 70px;
-    text-align: center;
-  }
-  
-  /*메인 중앙 박스 제목영역 스타일*/
-  .title {
-    font-size: 26px;
-    margin-bottom: 50px;
-    color: #fff;
-    background-color: #1c64f2;
-    padding: 10px 20px;
-    border-radius: 10px;
-  }
-  
-  /*폴더 업로드 팝업창 스타일*/
-  .uploadArea {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto;
-    background-color: #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .plus {
-    font-size: 48px;
-    color: #666;
-  }
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #ffe8e8, #fffacc, #e0f7ff, #ffd6ec, #e3f9e5);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  box-sizing: border-box;
+  position: relative;
+}
 
-  /* 2x2 그리드: 유지 */
-  /*폴더 생성시 파일 업로드 버튼의 이동을 위해 구역을 2*2로 제한*/
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-    justify-items: center;
-    align-items: center;
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.heroSection {
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+
+.heroTitle {
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(to right, #d4a373, #b296ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.heroSubtitle {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.createButton {
+  background-color: #2d4fff;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.createButton:hover {
+  background-color: #1c3ad3;
+}
+
+.mockButton {
+  background-color: #f4b631;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: default;
+}
+
+.grayBackground {
+  flex: 1;
+  background-color: #f4f6f8;
+  padding: 40px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.folderHeaderOnly {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.folderSection {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.folderList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.folderCard {
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.folderCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.folderCard h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.folderCard p {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #444;
+}
+
+.folderCard span {
+  font-size: 12px;
+  color: #888;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0 50px;
+}
+
+.emptyImage {
+  width: 150px;
+  height: auto;
+  opacity: 0.8;
+}
+
+.footer {
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 30px 10px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.footerInner {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.footerSection {
+  flex: 1;
+  min-width: 160px;
+}
+
+.footerLogoTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.footerText {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.footerHeading {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.footerLinkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footerLinkList li {
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+}
+
+.footerLinkList li:hover {
+  text-decoration: underline;
+  color: #2d4fff;
+}
+
+@media (max-width: 768px) {
+  .heroTitle { font-size: 36px; }
+  .heroSubtitle { font-size: 16px; }
+  .createButton, .mockButton {
+    padding: 8px 14px;
+    font-size: 14px;
   }
-  
-  /* 폴더 박스 스타일 */
-  .folder {
-    width: 140px;
-    height: 140px;
-    background-color: transparent;
-    text-align: center;
-    display: flex;
+  .folderCard h4 { font-size: 16px; }
+  .footer {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    gap: 24px;
   }
-  
-  /* 폴더 이미지 스타일 */
-  .folder img {
-    width: 130px;
-    height: auto;
-  }
-  
-  /* 만들어진 폴더 하단의 이름 텍스트 */
-  .folder p {
-    margin-top: 5px;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  /* + 버튼 스타일 */
-  .addButton {
-    width: 140px;
-    height: 140px;
-    background-color: #e0e0e0;
-    font-size: 64px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.2s;
-  }
-  
-/* + 버튼 호버링 효과 */
-  .addButton:hover {
-    background-color: #c4c3c3;
-  }
-  
-  
+}
+

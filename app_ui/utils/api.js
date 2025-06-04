@@ -2,7 +2,7 @@
 // utils/api.js
 
 export async function uploadFile(formData) {
-  const res = await fetch('http://3.148.139.172:8000/upload/', {
+  const res = await fetch('http://3.148.139.172:8000/api/v1/upload/', {
     method: 'POST',
     body: formData,
   });
