@@ -1,14 +1,23 @@
 # app_server/services/quiz_service.py
 
-from app_server.services.gpt_client import generate_quiz_from_text
+from pathlib import Path
 
-def generate_quiz(file_path: str, db):
-    try:
-        # 파일에서 텍스트 읽기
-        with open(file_path, "r", encoding="utf-8") as f:
-            text = f.read()
-    except FileNotFoundError:
+from app_server.services.gpt_client import generate_quiz_from_text
+from app_server.services.file_service import extract_text
+
+# uploads 폴더 경로
+ROOT_DIR = Path(__file__).resolve().parents[2]
+UPLOAD_DIR = ROOT_DIR / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+
+def generate_quiz(pid: str, db):
+    """Generate quiz for the text saved with the given pid."""
+    file_path = UPLOAD_DIR / f"{pid}.txt"
+    if not file_path.exists():
         return {"error": "파일을 찾을 수 없습니다."}
+
+    text = extract_text(str(file_path))
 
     # GPT로 퀴즈 생성
     quiz_data = generate_quiz_from_text(text)
@@ -31,4 +40,5 @@ def grade_quiz(quiz_id: str, answers: list[int], db):
         "total": len(correct_answers),
         "correct": score,
         "wrong": len(correct_answers) - score
-    }
+        }
+

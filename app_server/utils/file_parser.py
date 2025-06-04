@@ -1,9 +1,9 @@
 import os
-from extractors.pdf_extractor import extract_pdf
-from extractors.docx_extractor import extract_docx
-from extractors.txt_extractor import extract_txt
-from extractors.ppt_extractor import extract_ppt
-from extractors.hwp_extractor import extract_hwp
+from .extractors.pdf_extractor import extract_pdf
+from .extractors.docx_extractor import extract_docx
+from .extractors.txt_extractor import extract_txt
+from .extractors.ppt_extractor import extract_ppt
+from .extractors.hwp_extractor import extract_hwp
 
 def extract_text(file_path: str) -> str:
     ext = os.path.splitext(file_path)[-1].lower()
@@ -20,4 +20,3 @@ def extract_text(file_path: str) -> str:
     else:
         return "[지원하지 않는 파일 형식입니다]"
 
-d

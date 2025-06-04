@@ -1,14 +1,16 @@
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
+from pathlib import Path
 import os, uuid
 
 from app_server.core.database import get_db
 from app_server.models.file import UploadedFile
 from app_server.services.file_service import extract_text
 
-UPLOAD_DIR = "app_server/uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+ROOT_DIR = Path(__file__).resolve().parents[4]
+UPLOAD_DIR = ROOT_DIR / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
 
 router = APIRouter()
 
@@ -49,3 +51,14 @@ async def get_file(filename: str):
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="파일이 존재하지 않습니다")
     return FileResponse(file_path)
+
+@router.post("/text/")
+async def save_text(pid: str = Form(...), text: str = Form(...)):
+    """Save raw text to a file associated with the given pid."""
+    filename = f"{pid}.txt"
+    file_path = UPLOAD_DIR / filename
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(text)
+    return {"pid": pid, "message": "저장 완료"}
+
+

@@ -13,7 +13,7 @@ router = APIRouter()
 @router.post("/generate")
 async def create_quiz(request: QuizRequest, db: Session = Depends(get_db)):
     try:
-        quiz = generate_quiz(request.file_path, db)
+        quiz = generate_quiz(request.pid, db)
         return quiz
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
