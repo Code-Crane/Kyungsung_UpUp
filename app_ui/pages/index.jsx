@@ -1,10 +1,10 @@
 //메인 페이지 렌더링
-import Main from '../pages/main.jsx';
+import FileList from '../pages/FileList.jsx';
 
 export default function Home() {
   return (
     <main>
-      <Main /> {/*main.jsx파일 내용 가져오기*/}
+      <FileList /> {/*main.jsx파일 내용 가져오기*/}
     </main>
   );
 }

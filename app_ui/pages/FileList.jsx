@@ -48,10 +48,10 @@ export default function FileList() {
   const handleGenerateQuiz = () => {
   setShowLoading(true); // 로딩 즉시 표시
 
-  // 2초 뒤에 퀴즈 페이지로 이동
+  // 5초 뒤에 퀴즈 페이지로 이동
   setTimeout(() => {
     router.push(`/quiz?file=${fileName}&id=${fileId}&name=${folderName}&description=${description}`);
-  }, 2000);
+  }, 5000);
 };
 
   return (
