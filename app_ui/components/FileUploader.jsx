@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from '../styles/FileUploader.module.css';
-import { uploadFile } from '../utils/api'; // ✅ API 헬퍼 불러오기 (백엔드 파일 전송 URL설정 > uploadFile(formData))
+import { uploadFile } from '../utils/api'; // API 헬퍼 불러오기 (백엔드 파일 전송 URL설정 > uploadFile(formData))
 
 export default function UploadModal({ onClose, onCreate }) {
   const [name, setName] = useState('');

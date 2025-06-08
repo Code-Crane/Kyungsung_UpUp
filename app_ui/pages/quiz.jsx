@@ -23,7 +23,7 @@ export default function QuizPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // 퀴즈 데이터 fetch + 최소 로딩 시간 유지
+  // 퀴즈 데이터 fetch + 최소 로딩 시간 유지(5초)
   useEffect(() => {
     const fetchQuizData = async () => {
       const startTime = Date.now();
