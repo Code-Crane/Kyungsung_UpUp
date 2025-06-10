@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app_server.api.v1.endpoints import file, quiz
+from app_server.api.v2.endpoints import file, quiz
 from app_server.core.database import Base, engine
 
 # FastAPI 인스턴스 생성 + Swagger 정보 설정
@@ -23,5 +23,5 @@ app.add_middleware(
 Base.metadata.create_all(bind=engine)
 
 # 라우터 등록
-app.include_router(file.router, prefix="/api/v1", tags=["File"])
-app.include_router(quiz.router, prefix="/api/v1", tags=["Quiz"])
+app.include_router(file.router, prefix="/api/v2", tags=["File"])
+app.include_router(quiz.router, prefix="/api/v2", tags=["Quiz"])
