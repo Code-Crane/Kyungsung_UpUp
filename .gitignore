@@ -19,3 +19,4 @@ yarn-error.log
 # Mac / system
 .DS_Store
 uploads/
+!app_server/uploads/

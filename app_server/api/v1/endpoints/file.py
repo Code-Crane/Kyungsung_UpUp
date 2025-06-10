@@ -8,9 +8,9 @@ from app_server.core.database import get_db
 from app_server.models.file import UploadedFile
 from app_server.services.file_service import extract_text
 
-ROOT_DIR = Path(__file__).resolve().parents[4]
-UPLOAD_DIR = ROOT_DIR / "uploads"
-UPLOAD_DIR.mkdir(exist_ok=True)
+# Define the uploads directory inside ``app_server``.
+APP_DIR = Path(__file__).resolve().parents[3]
+UPLOAD_DIR = APP_DIR / "uploads"
 
 router = APIRouter()
 
