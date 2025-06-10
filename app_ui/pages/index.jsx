@@ -1,5 +1,5 @@
 //메인 페이지 렌더링
-import Main from '../pages/main.jsx';
+import Main from './main.jsx';
 
 export default function Home() {
   return (
