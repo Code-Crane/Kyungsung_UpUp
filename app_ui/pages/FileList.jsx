@@ -30,7 +30,7 @@ export default function FileList() {
     //뷰어구현
     setIsLoading(true);
     try {
-      const response = await fetch(`http://3.148.139.172:8000/api/v1/file/${filename}`);
+      const response = await fetch(`http://3.148.139.172:8000/api/v2/file/${filename}`);
       if (!response.ok) throw new Error('파일 불러오기에 실패했습니다.');
 
       const blob = await response.blob();

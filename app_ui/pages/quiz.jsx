@@ -29,7 +29,7 @@ export default function QuizPage() {
       const startTime = Date.now();
 
       try {
-        const res = await fetch(`http://3.148.139.172:8000/api/v1/generate/`);
+        const res = await fetch(`http://3.148.139.172:8000/api/v2/generate/`);
         if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
         const data = await res.json();
 
