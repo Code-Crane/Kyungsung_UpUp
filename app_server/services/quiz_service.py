@@ -6,9 +6,8 @@ from app_server.services.gpt_client import generate_quiz_from_text
 from app_server.services.file_service import extract_text
 
 # uploads 폴더 경로
-ROOT_DIR = Path(__file__).resolve().parents[2]
-UPLOAD_DIR = ROOT_DIR / "uploads"
-UPLOAD_DIR.mkdir(exist_ok=True)
+APP_DIR = Path(__file__).resolve().parents[1]
+UPLOAD_DIR = APP_DIR / "uploads"
 
 
 def generate_quiz(pid: str, db):

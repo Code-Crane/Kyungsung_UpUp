@@ -22,6 +22,7 @@ project-root/
 │           └── endpoints/
 │               ├── file.py      # 파일 업로드, 다운로드 API
 │               └── quiz.py      # 퀴즈 생성, 채점 API
+│   └── uploads/             # 업로드된 파일 저장 폴더
 ├── core/
 │   └── database.py          # SQLAlchemy + get_db
 ├── models/
@@ -41,7 +42,6 @@ project-root/
 │       ├── ppt_extractor.py
 │       ├── txt_extractor.py
 │       └── hwp_extractor.py
-├── uploads/                 # 업로드된 파일 저장 폴더
 ├── .env
 ├── requirements.txt
 └── README.md
