@@ -14,11 +14,16 @@ export default function QuizUI({ quizData }) {
   const [feedbackImage, setFeedbackImage] = useState(null);
 
   /*유효성 검사 조건문*/
-  if (!quizData) {
+  if (!quizData || !quizData.question) {
     return <div>퀴즈 데이터를 불러오는 중입니다...</div>;
   }
 
-  const { filename, question, options, explanations } = quizData;
+  const {
+    filename,
+    question,
+    options = [],
+    explanations = [],
+  } = quizData;
 
   const handleSelect = (idx) => {
     if (graded) return; // 채점 후에는 다른 보기 선택 불가
@@ -30,7 +35,7 @@ export default function QuizUI({ quizData }) {
       setGraded(false);
       setSelected(null);
       setExplanationIndex(null);
-    } else if (selected !== null) {
+    } else if (selected !== null && options.length > 0) {
       setGraded(true);
       setExplanationIndex(selected);
 
@@ -60,24 +65,28 @@ export default function QuizUI({ quizData }) {
         <div className={styles.questionBox}>{question}</div>
 
         <div className={styles.options}>
-          {options.map((opt, idx) => {
-            const isSelected = selected === idx;
-            const isCorrect = graded && selected === idx && opt.is_correct;
-            const isWrong = graded && isSelected && !opt.is_correct;
+          {options.length === 0 ? (
+            <div className={styles.noOptions}>보기 문항이 없습니다.</div>
+          ) : (
+            options.map((opt, idx) => {
+              const isSelected = selected === idx;
+              const isCorrect = graded && selected === idx && opt.is_correct;
+              const isWrong = graded && isSelected && !opt.is_correct;
 
-            return (
-              <div
-                key={idx}
-                className={`${styles.option} 
-                  ${isSelected ? styles.selected : ''} 
-                  ${isCorrect ? styles.correct : ''} 
-                  ${isWrong ? styles.incorrect : ''}`}
-                onClick={() => handleSelect(idx)}
-              >
-                {`${idx + 1}. ${opt.text}`}
-              </div>
-            );
-          })}
+              return (
+                <div
+                  key={idx}
+                  className={`${styles.option}
+                    ${isSelected ? styles.selected : ''}
+                    ${isCorrect ? styles.correct : ''}
+                    ${isWrong ? styles.incorrect : ''}`}
+                  onClick={() => handleSelect(idx)}
+                >
+                  {`${idx + 1}. ${opt.text}`}
+                </div>
+              );
+            })
+          )}
         </div>
 
         <button className={styles.button} onClick={handleGrade}>
