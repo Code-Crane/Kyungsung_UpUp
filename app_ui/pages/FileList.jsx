@@ -16,7 +16,7 @@ export default function FileList() {
   const folderName = searchParams.get('name') || '폴더 이름 없음';
   const fileName = searchParams.get('file') || '파일 없음';
   const description = searchParams.get('description') || '폴더 설명 없음';
-  
+
   const fileId = searchParams.get('id');
   const [isLoading, setIsLoading] = useState(false);
   const handleOpenFile = async () => {
@@ -35,13 +35,13 @@ export default function FileList() {
       const blob = await response.blob();
       const fileURL = URL.createObjectURL(blob);
       window.open(fileURL, '_blank');
-    } 
-    
+    }
+
     catch (err) {
       console.error('파일 열기 오류:', err);
       alert('파일 열기 중 문제가 발생했습니다.');
-    } 
-    
+    }
+
     finally {
       setIsLoading(false);
     }
@@ -49,43 +49,39 @@ export default function FileList() {
 
   // 버튼 클릭 시, /quiz로 이동하면서, fileID, filename. folderName, dexcription을 쿼리로 받아옴
   const handleGenerateQuiz = () => {
-
-  // 6초 뒤에 퀴즈 페이지로 이동
-  setTimeout(() => {
     router.push(`/quiz?file=${fileName}&id=${fileId}&name=${folderName}&description=${description}`);
-  }, 6000);
 };
 
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.heroSection}>
-        <h1 className={styles.heroTitle}>Learning Mate</h1>
-        <p className={styles.heroSubtitle}>선택한 폴더의 파일을 확인하고 퀴즈를 생성해보세요!</p>
+return (
+  <div className={styles.wrapper}>
+    <div className={styles.heroSection}>
+      <h1 className={styles.heroTitle}>Learning Mate</h1>
+      <p className={styles.heroSubtitle}>선택한 폴더의 파일을 확인하고 퀴즈를 생성해보세요!</p>
+    </div>
+
+    <div className={styles.grayBackground}>
+      <div className={styles.folderHeaderOnly}>
+        <h3>{folderName}</h3>
+        <p>{description}</p>
       </div>
 
-      <div className={styles.grayBackground}>
-        <div className={styles.folderHeaderOnly}>
-          <h3>{folderName}</h3>
+      <div className={styles.folderSection}>
+        <div className={styles.folderCard}>
+          <h4>{fileName}</h4>
           <p>{description}</p>
-        </div>
-
-        <div className={styles.folderSection}>
-          <div className={styles.folderCard}>
-            <h4>{fileName}</h4>
-            <p>{description}</p>
-            <div className={styles.cardButtons}>
-              <button className={styles.grayButton} onClick={handleOpenFile} disabled={isLoading}>
-                {isLoading ? '로딩 중...' : '파일 열기'}
-              </button>
-              <button className={styles.yellowButton} onClick={handleGenerateQuiz}>
-                퀴즈 생성
-              </button>
-            </div>
+          <div className={styles.cardButtons}>
+            <button className={styles.grayButton} onClick={handleOpenFile} disabled={isLoading}>
+              {isLoading ? '로딩 중...' : '파일 열기'}
+            </button>
+            <button className={styles.yellowButton} onClick={handleGenerateQuiz}>
+              퀴즈 생성
+            </button>
           </div>
         </div>
       </div>
-
-      <Footer /> {/*푸터 불러오기*/}
     </div>
-  );
+
+    <Footer /> {/*푸터 불러오기*/}
+  </div>
+);
 }
