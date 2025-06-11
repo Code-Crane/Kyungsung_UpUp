@@ -15,7 +15,7 @@ export default function Main() {
       description: folder.description || '',
       file: folder.filename || '',
     }).toString();
-    router.push(`/filelist?${query}`);
+    router.push(`/FileList?${query}`);
   };
 
   /* 폴더생성 버튼을 누르면 테스트용 폴더가 생성됩니다.
@@ -49,29 +49,29 @@ export default function Main() {
 
       {/* 생성된 폴더 영역 */}
       <div className={styles.grayBackground}>
-  <div className={styles.folderHeaderOnly}>
-    <h3>생성된 폴더</h3>
-    <p>생성된 폴더를 확인하고 학습을 시작해보세요!</p>
-  </div>
+        <div className={styles.folderHeaderOnly}>
+          <h3>생성된 폴더</h3>
+          <p>생성된 폴더를 확인하고 학습을 시작해보세요!</p>
+        </div>
 
-  {folders.length === 0 ? (
-    <div className={styles.emptyState}>
-      <img src="/image/ks_logo2.png" alt="아직 폴더가 없습니다" className={styles.emptyImage} />
-    </div>
-  ) : (
-    <div className={styles.folderSection}>
-      <div className={styles.folderList}>
-        {folders.map((folder, index) => (
-          <div key={index} className={styles.folderCard} onClick={() => goToFileList(folder)}>
-            <h4>{folder.name}</h4>
-            <p>{folder.description || '설명이 없습니다.'}</p>
-            <span>생성일: {new Date().toISOString().split('T')[0]}</span>
+        {folders.length === 0 ? (
+          <div className={styles.emptyState}>
+            <img src="/image/ks_logo2.png" alt="아직 폴더가 없습니다" className={styles.emptyImage} />
           </div>
-        ))}
+        ) : (
+          <div className={styles.folderSection}>
+            <div className={styles.folderList}>
+              {folders.map((folder, index) => (
+                <div key={index} className={styles.folderCard} onClick={() => goToFileList(folder)}>
+                  <h4>{folder.name}</h4>
+                  <p>{folder.description || '설명이 없습니다.'}</p>
+                  <span>생성일: {new Date().toISOString().split('T')[0]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  )}
-</div>
 
       {/* ✅ 푸터 */}
       <Footer />

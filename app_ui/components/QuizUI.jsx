@@ -15,7 +15,7 @@ export default function QuizUI({ quizData }) {
 
   /*유효성 검사 조건문*/
   if (!quizData || !quizData.question) {
-    return <div>퀴즈 데이터를 불러오는 중입니다...</div>;
+    return <div>퀴즈 데이터를 불러올 수 없습니다ㅜㅜ</div>;
   }
 
   const {
