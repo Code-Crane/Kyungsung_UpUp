@@ -38,7 +38,7 @@ export default function QuizPage() {
         
         if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
         const data = await res.json();
-        const quiz = data.quiz;
+        const quiz = data.quiz || data; // "quiz" 키가 없을 때도 대비
 
         let transformed = quiz;
         if (quiz && quiz.questions && quiz.questions.length > 0) {

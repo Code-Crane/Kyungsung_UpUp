@@ -13,9 +13,9 @@ export default function QuizUI({ quizData }) {
   const [explanationIndex, setExplanationIndex] = useState(null);
   const [feedbackImage, setFeedbackImage] = useState(null);
 
-  /*유효성 검사 조건문*/
+  /* 유효성 검사 - 필수 데이터가 없으면 렌더링하지 않음 */
   if (!quizData || !quizData.question) {
-    return <div>퀴즈 데이터를 불러오는 중입니다...</div>;
+    return <div>퀴즈 정보를 표시할 수 없습니다.</div>;
   }
 
   const {

@@ -21,6 +21,10 @@ def generate_quiz(pid: str, db):
     # GPT로 퀴즈 생성
     quiz_data = generate_quiz_from_text(text)
 
+    # FastAPI가 일관된 형태의 JSON을 반환하도록 보정
+    if isinstance(quiz_data, dict) and "questions" in quiz_data:
+        return {"questions": quiz_data["questions"]}
+
     # TODO: 원하면 여기서 DB에 quiz_data 저장 가능
     return quiz_data
 
