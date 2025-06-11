@@ -15,6 +15,7 @@ export default function QuizPage() {
   const [quizData, setQuizData] = useState(null);
   const [loadingIndex, setLoadingIndex] = useState(1);
   const [showLoading, setShowLoading] = useState(true); // 🔹로딩 표시 제어
+  const MAX_RETRIES = 3; // 서버 요청 재시도 횟수
 
   //  로딩 이미지 순환 효과
   useEffect(() => {
@@ -28,45 +29,59 @@ export default function QuizPage() {
   useEffect(() => {
     const fetchQuizData = async () => {
       const startTime = Date.now();
+      let attempts = 0;
+      let data = null;
 
-      try {
-        const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pid: fileId }),
-        }); 
-        
-        if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
-        const data = await res.json();
-        const quiz = data.quiz || data; // "quiz" 키가 없을 때도 대비
+      while (attempts < MAX_RETRIES && !data) {
+        try {
+          const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pid: fileId }),
+          });
 
-        let transformed = quiz;
-        if (quiz && quiz.questions && quiz.questions.length > 0) {
-          const q = quiz.questions[0];
-          transformed = {
-            filename: fileName,
-            question: q.question,
-            options: Array.isArray(q.options)
-              ? q.options.map((opt, idx) => ({
-                  text: opt,
-                  is_correct: idx + 1 === q.answer,
-                }))
-              : [],
-            explanations: q.explanations || [],
-          };
+          if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
+          data = await res.json();
+        } catch (err) {
+          attempts += 1;
+          if (attempts >= MAX_RETRIES) {
+            console.error(err);
+          } else {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
         }
-
-        const elapsed = Date.now() - startTime;
-        const remaining = 5000 - elapsed; // 최소 5초 유지
-
-        setTimeout(() => {
-          setQuizData(transformed);
-          setShowLoading(false);
-        }, remaining > 0 ? remaining : 0);
-      } catch (err) {
-        console.error(err);
-        setShowLoading(false);
       }
+
+      if (!data) {
+        setShowLoading(false);
+        return;
+      }
+
+      const quiz = data.quiz || data; // "quiz" 키가 없을 때도 대비
+
+      let transformed = quiz;
+      if (quiz && quiz.questions && quiz.questions.length > 0) {
+        const q = quiz.questions[0];
+        transformed = {
+          filename: fileName,
+          question: q.question,
+          options: Array.isArray(q.options)
+            ? q.options.map((opt, idx) => ({
+                text: opt,
+                is_correct: idx + 1 === q.answer,
+              }))
+            : [],
+          explanations: q.explanations || [],
+        };
+      }
+
+      const elapsed = Date.now() - startTime;
+      const remaining = 5000 - elapsed; // 최소 5초 유지
+
+      setTimeout(() => {
+        setQuizData(transformed);
+        setShowLoading(false);
+      }, remaining > 0 ? remaining : 0);
     };
 
     if (fileId) {
