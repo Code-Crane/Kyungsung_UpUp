@@ -38,31 +38,16 @@ export default function QuizPage() {
 
         if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
         const data = await res.json();
-        const quiz = data.quiz;
+        console.log(data); // 응답 전체 구조 확인
+        console.log(data.quiz); // quiz 데이터 구조 확인
 
-        let transformed = quiz;
-        if (quiz && quiz.questions && quiz.questions.length > 0) {
-          const q = quiz.questions[0];
-          transformed = {
-            filename: fileName || '파일 이름 없음',
-            question: q.question?.trim() || '문제가 비어 있습니다.',
-            options: Array.isArray(q.options) && q.options.length > 0
-              ? q.options.map((opt, idx) => ({
-                text: opt,
-                is_correct: idx + 1 === q.answer,
-              }))
-              : [{ text: '보기 문항이 없습니다.', is_correct: false }],
-            explanations: Array.isArray(q.explanations) && q.explanations.length > 0
-              ? q.explanations
-              : ['해설 정보가 제공되지 않았습니다.'],
-          };
-        }
+        const quiz = data.quiz;
 
         const elapsed = Date.now() - startTime;
         const remaining = 5000 - elapsed; // 최소 5초 유지
 
         setTimeout(() => {
-          setQuizData(transformed);
+          setQuizData(quiz); // quiz 객체만 상태로 저장
           setShowLoading(false);
         }, remaining > 0 ? remaining : 0);
       } catch (err) {
