@@ -15,7 +15,7 @@ export default function Main() {
       description: folder.description || '',
       file: folder.filename || '',
     }).toString();
-    router.push(`/filelist?${query}`);
+    router.push(`/FileList?${query}`);
   };
 
   /* 폴더생성 버튼을 누르면 테스트용 폴더가 생성됩니다.
