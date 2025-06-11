@@ -19,7 +19,6 @@ export default function FileList() {
   
   const fileId = searchParams.get('id');
   const [isLoading, setIsLoading] = useState(false);
-  const [showLoading, setShowLoading] = useState(true);
   const handleOpenFile = async () => {
 
     if (!fileId) {
@@ -46,7 +45,6 @@ export default function FileList() {
 
   // 버튼 클릭 시, /quiz로 이동하면서, fileID, filename. folderName, dexcription을 쿼리로 받아옴
   const handleGenerateQuiz = () => {
-  setShowLoading(true); // 로딩 즉시 표시
 
   // 6초 뒤에 퀴즈 페이지로 이동
   setTimeout(() => {
