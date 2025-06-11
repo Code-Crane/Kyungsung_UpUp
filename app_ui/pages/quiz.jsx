@@ -38,10 +38,11 @@ export default function QuizPage() {
         
         if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
         const data = await res.json();
+        const quiz = data.quiz;
 
-        let transformed = data;
-        if (data && data.questions && data.questions.length > 0) {
-          const q = data.questions[0];
+        let transformed = quiz;
+        if (quiz && quiz.questions && quiz.questions.length > 0) {
+          const q = quiz.questions[0];
           transformed = {
             filename: fileName,
             question: q.question,
@@ -85,7 +86,11 @@ export default function QuizPage() {
           />
         </div>
       ) : (
-        <QuizUI quizData={quizData} /> // props전달
+        quizData ? (
+          <QuizUI quizData={quizData} />
+        ) : (
+          <div>퀴즈를 불러오지 못했습니다.</div>
+        )
       )}
     </div>
   );
