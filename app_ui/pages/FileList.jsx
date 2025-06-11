@@ -29,16 +29,20 @@ export default function FileList() {
     //뷰어구현
     setIsLoading(true);
     try {
-      const response = await fetch(`http://3.148.139.172:8000/api/v2/file/${filename}`);
+      const response = await fetch(`http://3.148.139.172:8000/api/v2/file/${fileName}`);
       if (!response.ok) throw new Error('파일 불러오기에 실패했습니다.');
 
       const blob = await response.blob();
       const fileURL = URL.createObjectURL(blob);
       window.open(fileURL, '_blank');
-    } catch (err) {
+    } 
+    
+    catch (err) {
       console.error('파일 열기 오류:', err);
       alert('파일 열기 중 문제가 발생했습니다.');
-    } finally {
+    } 
+    
+    finally {
       setIsLoading(false);
     }
   };
