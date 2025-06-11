@@ -14,16 +14,16 @@ export default function QuizUI({ quizData }) {
   const [feedbackImage, setFeedbackImage] = useState(null);
 
   /*유효성 검사 조건문*/
-  if (!quizData || !quizData.question) {
-    return <div>퀴즈 데이터를 불러올 수 없습니다ㅜㅜ</div>;
+  if (!quizData || !quizData.questions || quizData.questions.length === 0) {
+    return <div>퀴즈 데이터가 없습니다</div>;
   }
 
+  const { filename = '' } = quizData;
   const {
-    filename,
     question,
     options = [],
     explanations = [],
-  } = quizData;
+  } = quizData.questions[0];
 
   const handleSelect = (idx) => {
     if (graded) return; // 채점 후에는 다른 보기 선택 불가
