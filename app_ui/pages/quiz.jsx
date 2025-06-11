@@ -10,6 +10,7 @@ import styles from '../styles/quiz.module.css';
 export default function QuizPage() {
   const searchParams = useSearchParams();
   const fileId = searchParams.get('id'); // URL에서 ?id=.. 가져오기
+  const fileName = searchParams.get('file');
 
   const [quizData, setQuizData] = useState(null);
   const [loadingIndex, setLoadingIndex] = useState(1);
@@ -38,11 +39,27 @@ export default function QuizPage() {
         if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
         const data = await res.json();
 
+        let transformed = data;
+        if (data && data.questions && data.questions.length > 0) {
+          const q = data.questions[0];
+          transformed = {
+            filename: fileName,
+            question: q.question,
+            options: Array.isArray(q.options)
+              ? q.options.map((opt, idx) => ({
+                  text: opt,
+                  is_correct: idx + 1 === q.answer,
+                }))
+              : [],
+            explanations: q.explanations || [],
+          };
+        }
+
         const elapsed = Date.now() - startTime;
         const remaining = 5000 - elapsed; // 최소 5초 유지
 
         setTimeout(() => {
-          setQuizData(data);
+          setQuizData(transformed);
           setShowLoading(false);
         }, remaining > 0 ? remaining : 0);
       } catch (err) {
