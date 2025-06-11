@@ -71,7 +71,8 @@ export default function QuizPage() {
       }
     };
 
-    if (fileId) {
+    // id가 "null"문자열인지 확인하고, API요청 방지
+    if (fileId && fileId !== 'null') {
       fetchQuizData();
     }
 
