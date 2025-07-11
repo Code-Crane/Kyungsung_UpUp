@@ -9,7 +9,7 @@ export default function FileList() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // 업로드 후 URL에는 아직 file_id가 없고, 파일명·설명만 전달됨
+  // 업로드 후 URL에는 file_id가 없고, fileName·description만 전달됨
   const folderName  = searchParams.get('name')        || '폴더 이름 없음';
   const fileName    = searchParams.get('file')        || '파일 없음';
   const description = searchParams.get('description') || '폴더 설명 없음';
@@ -22,50 +22,50 @@ export default function FileList() {
       alert('파일 정보가 없습니다.');
       return;
     }
-
     setIsLoading(true);
     try {
-      const response = await fetch(
+      const res = await fetch(
         `http://3.148.139.172:8000/api/v2/file?` +
         new URLSearchParams({ filename: fileName }).toString()
       );
-      if (!response.ok) throw new Error('파일 불러오기에 실패했습니다.');
-
-      const blob = await response.blob();
-      const fileURL = URL.createObjectURL(blob);
-      window.open(fileURL, '_blank');
-    } catch (err) {
-      console.error('파일 열기 오류:', err);
+      if (!res.ok) throw new Error();
+      const blob = await res.blob();
+      window.open(URL.createObjectURL(blob), '_blank');
+    } catch {
       alert('파일 열기 중 문제가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 2) 퀴즈 생성: filename만 보내서 generate 호출 → file_id 받아서 QuizPage로 이동
+  // 2) 퀴즈 생성: filename으로 generate 호출 → file_id 받아서 QuizPage로 이동
   const handleGenerateQuiz = async () => {
     if (!fileName) {
       alert('퀴즈를 생성할 파일 정보가 없습니다.');
       return;
     }
-
     setIsLoading(true);
     try {
       const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        // 파일명만 보내면 백엔드가 file_id를 생성해 줍니다
         body: JSON.stringify({ filename: fileName }),
       });
-      if (!res.ok) throw new Error('퀴즈 생성에 실패했습니다.');
-
-      const data = await res.json(); // { quiz: […], file_id: 123 }
+      if (!res.ok) {
+        const text = await res.text();
+        console.error('generate API error:', res.status, text);
+        throw new Error();
+      }
+      // generate 결과에서 file_id 꺼내기
+      const { file_id: newFileId } = await res.json();
+      // QuizPage로 file_id랑 원본 파일명만 넘깁니다
       const params = new URLSearchParams({
-        file_id:  data.file_id.toString(),
+        file_id:  newFileId.toString(),
         filename: fileName,
       });
       router.push(`/quiz?${params.toString()}`);
-    } catch (err) {
-      console.error('퀴즈 생성 오류:', err);
+    } catch {
       alert('퀴즈 생성 중 문제가 발생했습니다.');
     } finally {
       setIsLoading(false);
