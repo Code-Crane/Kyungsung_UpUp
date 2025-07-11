@@ -1,49 +1,51 @@
 import { useState } from 'react';
 import styles from '../styles/FileUploader.module.css';
-import { uploadFile } from '../utils/api'; // API 헬퍼 불러오기
+import { uploadFile } from '../utils/api'; // API 헬퍼
 
 export default function UploadModal({ onClose, onCreate }) {
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-  const [file, setFile] = useState(null);
+  const [name, setName]         = useState('');
+  const [desc, setDesc]         = useState('');
+  const [file, setFile]         = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB
 
   const handleSubmit = async () => {
-    // 1) 폴더 이름 유효성
     if (!name.trim()) {
       alert('폴더 이름을 입력해주세요.');
       return;
     }
-
-    // 2) 파일 선택 유효성
     if (!file) {
       alert('파일을 첨부해주세요.');
       return;
     }
-
-    // 3) 파일 크기 검증
     if (file.size > MAX_FILE_SIZE) {
       alert('30MB 이하의 파일만 업로드할 수 있습니다.');
       return;
     }
 
-    // 4) 업로드 시작
     setIsLoading(true);
     try {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('lecture_name', name);
-      formData.append('description', desc); // 필요 시 백엔드에 설명도 함께 전달
+      formData.append('description', desc);
 
-      const data = await uploadFile(formData); 
+      // uploadFile(formData) 호출 시 다음 형식의 응답을 기대합니다:
+      // {
+      //   fileid: 123,
+      //   filename: "uuid파일명.ext",
+      //   text: "파일에서 추출된 텍스트",
+      //   message: "업로드 및 저장 완료"
+      // }
+      const data = await uploadFile(formData);
 
+      // fileid → file_id로 매핑
       const newFolder = {
         name,
         description: desc,
-        file,
         filename: data.filename,
+        file_id: data.fileid,
         text: data.text,
       };
 

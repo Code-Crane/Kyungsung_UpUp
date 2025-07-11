@@ -1,7 +1,3 @@
-// 파일을 열 때는 파일 ID를 기반으로, 
-// 백엔드에서 해당 파일을 찾아 반환하는 API 엔드포인트를 호출
-// /filelist?name=컴퓨터구조론&description=수업자료&id=3&file=자료.pdf 백엔드에 파일저장시에 브라우저 정상 출력
-
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -13,15 +9,17 @@ export default function FileList() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // URL에서 파라미터 꺼내기
   const folderName  = searchParams.get('name')        || '폴더 이름 없음';
-  const fileName    = searchParams.get('file')        || '파일 없음';
+  const fileName    = searchParams.get('filename')    || '파일 없음';
   const description = searchParams.get('description') || '폴더 설명 없음';
+  const fileId      = searchParams.get('file_id');
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // 1) 파일 열기: 업로드 시 받은 파일명(filename)으로 조회
+  // 1) 파일 열기: file_id로만 조회
   const handleOpenFile = async () => {
-    if (!fileName) {
+    if (!fileId) {
       alert('열 파일 정보가 없습니다.');
       return;
     }
@@ -30,7 +28,7 @@ export default function FileList() {
     try {
       const response = await fetch(
         `http://3.148.139.172:8000/api/v2/file?` +
-        new URLSearchParams({ filename: fileName }).toString()
+        new URLSearchParams({ file_id: fileId }).toString()
       );
       if (!response.ok) throw new Error('파일 불러오기에 실패했습니다.');
 
@@ -45,31 +43,17 @@ export default function FileList() {
     }
   };
 
-  // 2) 퀴즈 생성: filename으로 generate 호출 → { quiz, file_id } 받음 → file_id로 QuizPage 이동
-  const handleGenerateQuiz = async () => {
-    if (!fileName) {
+  // 2) 퀴즈 생성: file_id + filename을 쿼리로 넘겨서 QuizPage로 이동
+  const handleGenerateQuiz = () => {
+    if (!fileId) {
       alert('퀴즈를 생성할 파일 정보가 없습니다.');
       return;
     }
-
-    setIsLoading(true);
-    try {
-      const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: fileName }),
-      });
-      if (!res.ok) throw new Error('퀴즈 생성에 실패했습니다.');
-
-      const data = await res.json(); // { quiz: [...], file_id: 123 }
-      const params = new URLSearchParams({ file_id: data.file_id.toString() });
-      router.push(`/quiz?${params.toString()}`);
-    } catch (err) {
-      console.error('퀴즈 생성 오류:', err);
-      alert('퀴즈 생성 중 문제가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
+    const params = new URLSearchParams({
+      file_id:  fileId,
+      filename: fileName,
+    });
+    router.push(`/quiz?${params.toString()}`);
   };
 
   return (
