@@ -7,58 +7,48 @@ import styles from '../styles/quiz.module.css';
 
 export default function QuizPage() {
   const searchParams = useSearchParams();
-  // 기존: const fileId = searchParams.get('id');
-  // 변경: URL에서 ?file_id=.. 가져오기
+  // FileList에서 전달한 file_id 읽기
   const fileId = searchParams.get('file_id');
-  const fileName = searchParams.get('fileName');
 
-  const [quizData, setQuizData] = useState(null);
+  const [quizData, setQuizData]     = useState(null);
   const [loadingIndex, setLoadingIndex] = useState(1);
-  const [showLoading, setShowLoading] = useState(true); // 🔹로딩 표시 제어
+  const [showLoading, setShowLoading]   = useState(true);
 
-  // 로딩 이미지 순환 효과
+  // 로딩 애니메이션 순환
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLoadingIndex((prev) => (prev % 3) + 1);
+    const iv = setInterval(() => {
+      setLoadingIndex((i) => (i % 3) + 1);
     }, 600);
-    return () => clearInterval(interval);
+    return () => clearInterval(iv);
   }, []);
 
-  // 퀴즈 데이터 fetch + 최소 로딩 시간 유지(5초)
+  // file_id로 퀴즈 조회 + 최소 5초 로딩 유지
   useEffect(() => {
+    if (!fileId || fileId === 'null') return;
+
     const fetchQuizData = async () => {
       const startTime = Date.now();
-
       try {
-        const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          // 기존: body: JSON.stringify({ pid: fileId }),
-          // 변경: backend가 기대하는 key 이름으로
-          body: JSON.stringify({ file_id: fileId }),
-        });
-
+        const res = await fetch(
+          `http://3.148.139.172:8000/api/v2/quiz?` +
+          new URLSearchParams({ file_id: fileId }).toString()
+        );
         if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
-        const data = await res.json();
-        console.log(data.quiz);
+        const { quiz } = await res.json();
 
-        const quiz = data.quiz;
         const elapsed = Date.now() - startTime;
         const remaining = 5000 - elapsed;
-
         setTimeout(() => {
           setQuizData(quiz);
           setShowLoading(false);
         }, remaining > 0 ? remaining : 0);
       } catch (err) {
-        console.error(err);
+        console.error('QuizPage fetch error:', err);
         setShowLoading(false);
       }
     };
 
-    if (fileId && fileId !== 'null') {
-      fetchQuizData();
-    }
+    fetchQuizData();
   }, [fileId]);
 
   return (
