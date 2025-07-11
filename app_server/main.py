@@ -2,6 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app_server.api.v2.endpoints import file, quiz
 from app_server.core.database import Base, engine
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 
 # FastAPI 인스턴스 생성 + Swagger 정보 설정
 app = FastAPI(

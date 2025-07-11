@@ -3,10 +3,13 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from pathlib import Path
 import os, uuid
+import logging
 
 from app_server.core.database import get_db
 from app_server.models.file import UploadedFile
 from app_server.services.file_service import extract_text
+
+logger = logging.getLogger(__name__)
 
 # Define the uploads directory inside ``app_server``.
 APP_DIR = Path(__file__).resolve().parents[3]
@@ -20,30 +23,35 @@ async def upload_file(
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
-    unique_filename = f"{uuid.uuid4().hex}_{file.filename}"
-    file_path = os.path.join(UPLOAD_DIR, unique_filename)
-    with open(file_path, "wb") as f:
-        f.write(await file.read())
+    try:
+        unique_filename = f"{uuid.uuid4().hex}_{file.filename}"
+        file_path = os.path.join(UPLOAD_DIR, unique_filename)
+        with open(file_path, "wb") as f:
+            f.write(await file.read())
 
-    extracted = extract_text(file_path)
-    if not extracted:
-        raise HTTPException(status_code=400, detail="텍스트 추출 실패")
+        extracted = extract_text(file_path)
+        if not extracted:
+            raise HTTPException(status_code=400, detail="텍스트 추출 실패")
 
-    db_file = UploadedFile(
-        filename=unique_filename,
-        lecture_name=lecture_name,
-        extracted_text=extracted
-    )
-    db.add(db_file)
-    db.commit()
-    db.refresh(db_file)
+        db_file = UploadedFile(
+            filename=unique_filename,
+            lecture_name=lecture_name,
+            extracted_text=extracted,
+        )
+        db.add(db_file)
+        db.commit()
+        db.refresh(db_file)
 
-    return {
-        "file_id": db_file.id,
-        "filename": unique_filename,
-        "text": extracted,
-        "message": "업로드 및 저장 완료"
-    }
+        return {
+            "file_id": db_file.id,
+            "filename": unique_filename,
+            "text": extracted,
+            "message": "업로드 및 저장 완료",
+        }
+    except Exception as e:
+        db.rollback()
+        logger.exception("Error in upload_file: %s", e)
+        raise HTTPException(status_code=500, detail="파일 업로드 중 오류가 발생했습니다.")
 
 @router.get("/file/{filename}")
 async def get_file(filename: str):

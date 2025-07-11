@@ -2,13 +2,15 @@
 
 import os
 import json
-import traceback
+import logging
+from fastapi import HTTPException
 from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+logger = logging.getLogger(__name__)
 
 def generate_quiz_from_text(text: str) -> dict:
     try:
@@ -47,6 +49,5 @@ def generate_quiz_from_text(text: str) -> dict:
         return quiz_json
 
     except Exception as e:
-        print("❌ GPT 호출 오류:", e)
-        traceback.print_exc()
-        return {"error": "문제 생성에 실패했습니다."}
+        logger.exception("Error in generate_quiz_from_text: %s", e)
+        raise HTTPException(status_code=500, detail="문제 생성에 실패했습니다.")
