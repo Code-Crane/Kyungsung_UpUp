@@ -1,5 +1,3 @@
-# app_server/api/v1/endpoints/quiz.py
-
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from fastapi import Depends

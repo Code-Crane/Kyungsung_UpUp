@@ -7,14 +7,12 @@ import styles from '../styles/quiz.module.css';
 
 export default function QuizPage() {
   const searchParams = useSearchParams();
-  // FileList에서 넘겨준 file_id
   const fileId = searchParams.get('file_id');
 
   const [quizData, setQuizData]         = useState(null);
   const [loadingIndex, setLoadingIndex] = useState(1);
   const [showLoading, setShowLoading]   = useState(true);
 
-  // 로딩 애니메이션 순환 (1,2,3 → 1…)
   useEffect(() => {
     const iv = setInterval(() => {
       setLoadingIndex(i => (i % 3) + 1);
@@ -22,7 +20,6 @@ export default function QuizPage() {
     return () => clearInterval(iv);
   }, []);
 
-  // file_id 유효성 검사 & 퀴즈 데이터 호출
   useEffect(() => {
     // file_id 없으면 곧바로 로딩 종료
     if (!fileId || fileId === 'null') {
@@ -41,7 +38,6 @@ export default function QuizPage() {
         const elapsed = Date.now() - startTime;
         const remaining = 5000 - elapsed;
 
-        // 최소 5초 로딩 유지
         setTimeout(() => {
           setQuizData(quiz);
           setShowLoading(false);
@@ -66,7 +62,6 @@ export default function QuizPage() {
           />
         </div>
       ) : quizData ? (
-        // QuizUI 쪽에서 URL의 filename 파라미터와 quizData.filename을 사용해 헤더를 표시하도록 구성
         <QuizUI quizData={quizData} />
       ) : (
         <div>퀴즈를 불러오지 못했습니다.</div>

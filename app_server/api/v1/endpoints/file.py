@@ -8,7 +8,6 @@ from app_server.core.database import get_db
 from app_server.models.file import UploadedFile
 from app_server.services.file_service import extract_text
 
-# Define the uploads directory inside ``app_server``.
 APP_DIR = Path(__file__).resolve().parents[3]
 UPLOAD_DIR = APP_DIR / "uploads"
 

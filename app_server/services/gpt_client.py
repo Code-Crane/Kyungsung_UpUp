@@ -1,5 +1,3 @@
-# app_server/services/gpt_client.py
-
 import os
 import json
 import traceback
