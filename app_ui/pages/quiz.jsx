@@ -1,6 +1,3 @@
-// QuizUI에 props전달이 되던 이슈 수정(25.05.29)
-// 로딩페이지 및 요청 타이밍 조정 필요(25.07.11)
-
 'use client';
 
 import { useEffect, useState } from 'react';

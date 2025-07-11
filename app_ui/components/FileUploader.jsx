@@ -60,7 +60,7 @@ export default function UploadModal({ onClose, onCreate }) {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <h3>📁 폴더를 생성합니다.</h3>
+        <h3>폴더를 생성합니다.</h3>
 
         <p style={{ textAlign: 'left' }}>폴더명</p>
         <input

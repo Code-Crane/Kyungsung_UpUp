@@ -18,17 +18,6 @@ export default function Main() {
     router.push(`/FileList?${query}`);
   };
 
-  /* 폴더생성 버튼을 누르면 테스트용 폴더가 생성됩니다.
-  const handleCreateFolder = () => {
-  const testFolder = {
-    name: '테스트 폴더',
-    description: '설명 없이 생성된 테스트 폴더입니다.',
-    filename: 'sample.pdf'
-  };
-  setFolders([...folders, testFolder]);
-};
-*/
-
   const handleCreateFolder = (newFolder) => {
     if (folders.length < 9) {
       setFolders([...folders, newFolder]);
@@ -37,7 +26,6 @@ export default function Main() {
 
   return (
     <div className={styles.wrapper}>
-      {/* 상단 텍스트 및 버튼 영역 */}
       <div className={styles.heroSection}>
         <h1 className={styles.heroTitle}>Learning Mate</h1>
         <p className={styles.heroSubtitle}>다양한 학습 자료를 업로드하고 퀴즈를 풀면서 성장하세요!</p>
@@ -47,7 +35,6 @@ export default function Main() {
         </div>
       </div>
 
-      {/* 생성된 폴더 영역 */}
       <div className={styles.grayBackground}>
         <div className={styles.folderHeaderOnly}>
           <h3>생성된 폴더</h3>
@@ -73,7 +60,6 @@ export default function Main() {
         )}
       </div>
 
-      {/* ✅ 푸터 */}
       <Footer />
 
       {showModal && (
