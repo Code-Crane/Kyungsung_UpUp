@@ -45,3 +45,4 @@ project-root/
 ├── .env
 ├── requirements.txt
 └── README.md
+```
