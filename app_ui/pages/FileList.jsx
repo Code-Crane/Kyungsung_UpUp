@@ -11,77 +11,91 @@ import Footer from '../components/Footer';
 
 export default function FileList() {
   const searchParams = useSearchParams();
-  const router = useRouter(); // 라우터 사용
+  const router = useRouter();
 
   const folderName = searchParams.get('name') || '폴더 이름 없음';
   const fileName = searchParams.get('file') || '파일 없음';
   const description = searchParams.get('description') || '폴더 설명 없음';
 
-  const fileId = searchParams.get('id');
+  // URL에서 ?file_id=.. 가져오기
+  const fileId = searchParams.get('file_id');
   const [isLoading, setIsLoading] = useState(false);
-  const handleOpenFile = async () => {
 
+  const handleOpenFile = async () => {
     if (!fileId) {
       alert('파일 ID가 없어 파일을 열 수 없습니다.');
       return;
     }
 
-    //뷰어구현
     setIsLoading(true);
     try {
-      const response = await fetch(`http://3.148.139.172:8000/api/v2/file/${fileName}`);
+      const response = await fetch(
+        `http://3.148.139.172:8000/api/v2/file?` +
+        new URLSearchParams({ file_id: fileId }).toString()
+      );
       if (!response.ok) throw new Error('파일 불러오기에 실패했습니다.');
 
       const blob = await response.blob();
       const fileURL = URL.createObjectURL(blob);
       window.open(fileURL, '_blank');
-    }
-
-    catch (err) {
+    } catch (err) {
       console.error('파일 열기 오류:', err);
       alert('파일 열기 중 문제가 발생했습니다.');
-    }
-
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
 
-  // 버튼 클릭 시, /quiz로 이동하면서, fileID, filename. folderName, dexcription을 쿼리로 받아옴
+  // 퀴즈 생성 시에도 file_id 키만 전달
   const handleGenerateQuiz = () => {
-    router.push(`/quiz?file=${fileName}&id=${fileId}&name=${folderName}&description=${description}`);
-};
+    if (!fileId) {
+      alert('퀴즈를 생성할 파일 ID가 없습니다.');
+      return;
+    }
+    const params = new URLSearchParams({ file_id: fileId });
+    router.push(`/quiz?${params.toString()}`);
+  };
 
-return (
-  <div className={styles.wrapper}>
-    <div className={styles.heroSection}>
-      <h1 className={styles.heroTitle}>Learning Mate</h1>
-      <p className={styles.heroSubtitle}>선택한 폴더의 파일을 확인하고 퀴즈를 생성해보세요!</p>
-    </div>
-
-    <div className={styles.grayBackground}>
-      <div className={styles.folderHeaderOnly}>
-        <h3>{folderName}</h3>
-        <p>{description}</p>
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.heroSection}>
+        <h1 className={styles.heroTitle}>Learning Mate</h1>
+        <p className={styles.heroSubtitle}>
+          선택한 폴더의 파일을 확인하고 퀴즈를 생성해보세요!
+        </p>
       </div>
 
-      <div className={styles.folderSection}>
-        <div className={styles.folderCard}>
-          <h4>{fileName}</h4>
+      <div className={styles.grayBackground}>
+        <div className={styles.folderHeaderOnly}>
+          <h3>{folderName}</h3>
           <p>{description}</p>
-          <div className={styles.cardButtons}>
-            <button className={styles.grayButton} onClick={handleOpenFile} disabled={isLoading}>
-              {isLoading ? '로딩 중...' : '파일 열기'}
-            </button>
-            <button className={styles.yellowButton} onClick={handleGenerateQuiz}>
-              퀴즈 생성
-            </button>
+        </div>
+
+        <div className={styles.folderSection}>
+          <div className={styles.folderCard}>
+            <h4>{fileName}</h4>
+            <p>{description}</p>
+            <div className={styles.cardButtons}>
+              <button
+                className={styles.grayButton}
+                onClick={handleOpenFile}
+                disabled={isLoading}
+              >
+                {isLoading ? '로딩 중...' : '파일 열기'}
+              </button>
+              <button
+                className={styles.yellowButton}
+                onClick={handleGenerateQuiz}
+              >
+                퀴즈 생성
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <Footer /> {/*푸터 불러오기*/}
-  </div>
-);
+      <Footer />
+    </div>
+  );
 }
+
