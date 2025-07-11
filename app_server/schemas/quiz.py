@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import List
 
 class QuizRequest(BaseModel):
-    pid: str
+    filename: str
 
 class QuizSubmission(BaseModel):
     quiz_id: str
