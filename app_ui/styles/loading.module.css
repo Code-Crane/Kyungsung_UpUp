@@ -1,0 +1,38 @@
+/* styles/loading.module.css */
+
+.loadingWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;           /* 화면 전체 세로 중앙 */
+  background-color: #ffffff; /* 필요시 색상 변경 가능 */
+  text-align: center;
+}
+
+.loadingText {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.loadingSubText {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.loadingImage {
+  width: 120px;           /* 이미지 크기 */
+  height: 120px;
+  object-fit: contain;
+  animation: fadeInOut 0.5s ease-in-out infinite;
+}
+
+/* 0.5초마다 부드럽게 깜빡이는 효과 (이미지 전환 느낌 강화) */
+@keyframes fadeInOut {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}

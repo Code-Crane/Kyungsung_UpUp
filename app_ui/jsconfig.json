@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",  // app-ui 폴더 자체를 기준으로
+    "paths": {
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"],
+      "@utils/*": ["utils/*"]
+    }
+  }
+}
