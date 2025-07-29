@@ -11,7 +11,7 @@ export default function FileList() {
 
   // 업로드 후 URL에는 file_id가 없고, fileName·description만 전달됨
   const folderName = searchParams.get('name') || '폴더 이름 없음';
-  const fileName = searchParams.get('file') || '파일 없음';
+  const fileName = searchParams.get('file');
   const description = searchParams.get('description') || '폴더 설명 없음';
 
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function FileList() {
   // 1) 파일 열기: filename 파라미터로 호출
   const handleOpenFile = async () => {
     if (!fileName) {
-      alert('파일 정보가 없습니다.');
+      alert('퀴즈를 생성할 파일 정보가 없습니다.');
       return;
     }
     setIsLoading(true);
@@ -36,38 +36,41 @@ export default function FileList() {
     }
   };
 
-  // 2) 퀴즈 생성: filename으로 generate 호출 → file_id 받아서 QuizPage로 이동
   const handleGenerateQuiz = async () => {
-    if (!fileName) {
-      alert('퀴즈를 생성할 파일 정보가 없습니다.');
+  console.log('[DEBUG] 퀴즈 생성 버튼 클릭됨');
+  console.log('[DEBUG] filename:', fileName);
+
+  if (!fileName) {
+    alert('퀴즈를 생성할 파일 정보가 없습니다.');
+    return;
+  }
+  setIsLoading(true);
+  try {
+    const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: fileName }),
+    });
+    console.log(' [DEBUG] API 응답 상태:', res.status);
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('generate API error:', res.status, text);
+      alert(`퀴즈 생성 API 오류: ${res.status}\n${text}`);
       return;
     }
-    setIsLoading(true);
-    try {
-      const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // 파일명만 보내면 백엔드가 file_id를 생성해 줍니다
-        body: JSON.stringify({ filename: fileName }),
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        console.error('generate API error:', res.status, text);
-        throw new Error();
-      }
 
-      await res.json(); // 응답만 확인하고 file_id는 사용하지 않음
-      const params = new URLSearchParams({
-        filename: fileName,
-      });
-      router.push(`/loading?${params.toString()}`);
+    await res.json();
+    const params = new URLSearchParams({ filename: fileName });
+    router.push(`/loading?${params.toString()}`);
+  } catch (err) {
+    console.error(' [DEBUG] fetch 오류:', err);
+    alert('퀴즈 생성 중 문제가 발생했습니다.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-    } catch {
-      alert('퀴즈 생성 중 문제가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className={styles.wrapper}>
