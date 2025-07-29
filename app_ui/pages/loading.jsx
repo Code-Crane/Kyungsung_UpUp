@@ -5,7 +5,7 @@ import styles from '../styles/loading.module.css';
 
 export default function LoadingPage() {
   const router = useRouter();
-  const { filename } = router.query; 
+  const { filename } = router.query;  
 
   // 이미지 순환 상태 (1~3)
   const [imageIndex, setImageIndex] = useState(1);
@@ -28,7 +28,7 @@ export default function LoadingPage() {
 
       return () => clearTimeout(timer);
     }
-  }, [filename, router]);   
+  }, [filename, router]);  
 
   return (
     <div className={styles.loadingWrapper}>
