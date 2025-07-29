@@ -6,11 +6,7 @@ from app_server.models.file import UploadedFile
 
 def generate_quiz(filename: str, db):
     """Generate quiz from text stored for the given filename."""
-    db_file = (
-        db.query(UploadedFile)
-        .filter(UploadedFile.filename == filename)
-        .first()
-    )
+    db_file = db.query(UploadedFile).filter(UploadedFile.filename == filename).first()
     if not db_file:
         return {"error": "파일을 찾을 수 없습니다."}
 
@@ -26,7 +22,7 @@ def generate_quiz(filename: str, db):
     if not questions:
         return {"error": "GPT가 유효한 퀴즈를 생성하지 못했습니다."}
 
-    return questions
+    return questions , db_file
 
 
 def grade_quiz(quiz_id: str, answers: list[int], db):
