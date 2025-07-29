@@ -26,7 +26,7 @@ def generate_quiz(filename: str, db):
     if not questions:
         return {"error": "GPT가 유효한 퀴즈를 생성하지 못했습니다."}
 
-    return {"quiz": questions}
+    return questions
 
 
 def grade_quiz(quiz_id: str, answers: list[int], db):
