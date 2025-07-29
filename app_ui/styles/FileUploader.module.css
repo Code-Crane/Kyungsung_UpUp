@@ -1,0 +1,112 @@
+/* styles/UploadModal.module.css */
+.overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal {
+    background-color: #fff;
+    padding: 35px;
+    border-radius: 15px;
+    width: 500px;
+    height: 480px;
+    text-align: center;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .description {
+    height: 100px;
+    resize: none;
+    line-height: 1.4;
+    font-size: 14px;
+  }
+  
+  .button {
+    background-color: #1c64f2;
+    color: #fff;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel {
+    background-color: #ccc;
+    color: #000;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .fileRow {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    height: 48px;
+  }
+  
+  .fileLabel {
+    background-color: #726e77;
+    color: #fff;
+    font-weight: bold;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .fileDisplay {
+    flex: 1;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    overflow: hidden;
+  }
+  
+  .fileName {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .warning {
+    color: red;
+    font-size: 12px;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .input::placeholder{
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .textarea::placeholder {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+
+  

@@ -1,0 +1,194 @@
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #ffe8e8, #fffacc, #e0f7ff, #ffd6ec, #e3f9e5);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  box-sizing: border-box;
+  position: relative;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.heroSection {
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+
+.heroTitle {
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(to right, #d4a373, #b296ff);
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 10px;
+}
+
+.heroSubtitle {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.grayBackground {
+  flex: 1;
+  padding: 40px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f4f6f8;
+}
+
+.folderHeaderOnly {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.folderSection {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.folderCard {
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+  transition: box-shadow 0.2s;
+}
+
+.folderCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.folderCard h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.folderCard p {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #444;
+}
+
+.folderCard span {
+  font-size: 12px;
+  color: #888;
+}
+
+.cardButtons {
+  margin-top: 10px;
+}
+
+.grayButton {
+  background-color: #e0e0e0;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.yellowButton {
+  background-color: #f1b01a;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+}
+
+.footer {
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 30px 10px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.footerInner {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.footerSection {
+  flex: 1;
+  min-width: 160px;
+}
+
+.footerLogoTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.footerText {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.footerHeading {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.footerLinkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footerLinkList li {
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+}
+
+.footerLinkList li:hover {
+  text-decoration: underline;
+  color: #2d4fff;
+}
+
+@media (max-width: 768px) {
+  .heroTitle { font-size: 36px; }
+  .heroSubtitle { font-size: 16px; }
+  .folderCard h4 { font-size: 16px; }
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+}
+

@@ -1,0 +1,27 @@
+/*해당 파일은 Next.js에서 앱 전체에 공통적으로 적용되는 전역 스타일 파일입니다.*/
+/*폰트, 전체 배경색상, 버튼 공통 스타일, 전체 페이지에 필요한 클래스들이 들어갈 예정입니다.*/
+
+:root {
+  --font-sans: 'Geist', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+code, pre {
+  font-family: var(--font-mono);
+}
