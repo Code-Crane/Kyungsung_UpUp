@@ -1,13 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';  
 import styles from '../styles/loading.module.css';
 
 export default function LoadingPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const filename = searchParams.get('filename');
+  const { filename } = router.query; 
 
   // 이미지 순환 상태 (1~3)
   const [imageIndex, setImageIndex] = useState(1);
@@ -26,11 +24,11 @@ export default function LoadingPage() {
     if (filename) {
       const timer = setTimeout(() => {
         router.push(`/quiz?filename=${filename}`);
-       }, 3000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
-  }, [fileId, filename, router]);
+  }, [filename, router]);   
 
   return (
     <div className={styles.loadingWrapper}>
