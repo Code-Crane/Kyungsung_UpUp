@@ -21,8 +21,12 @@ def generate_quiz(filename: str, db):
     # GPT로 퀴즈 생성
     quiz_data = generate_quiz_from_text(text)
 
-    # TODO: 원하면 여기서 DB에 quiz_data 저장 가능
-    return quiz_data
+    # GPT 응답에서 "questions" 키만 추출해서 프론트 구조로 맞춤
+    questions = quiz_data.get("questions", [])
+    if not questions:
+        return {"error": "GPT가 유효한 퀴즈를 생성하지 못했습니다."}
+
+    return {"quiz": questions}
 
 
 def grade_quiz(quiz_id: str, answers: list[int], db):
@@ -40,5 +44,4 @@ def grade_quiz(quiz_id: str, answers: list[int], db):
         "correct": score,
         "wrong": len(correct_answers) - score
         }
-
 
