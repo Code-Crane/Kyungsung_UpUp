@@ -20,3 +20,10 @@ class QuizItem(BaseModel):
 
 class QuizOut(BaseModel):
     quiz: List[QuizItem]
+    
+class QuizWithFileOut(BaseModel):
+    file_id: int
+    filename: str
+    text: str
+    message: str
+    quiz: List[QuizItem]
