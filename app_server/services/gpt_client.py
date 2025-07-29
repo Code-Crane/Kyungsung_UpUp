@@ -16,15 +16,19 @@ def generate_quiz_from_text(text: str) -> dict:
     try:
         prompt = f"""
         아래 내용을 바탕으로 객관식 문제 3개를 만들어주세요.
-        각 문제는 보기 4개와 정답 인덱스(1~4)를 포함해야 하며,
+        각 문제는 보기 4개와, 각 보기에 'text'와 'is_correct'(True/False)를 포함해야 합니다.
+
         다음 JSON 형식으로 반환해 주세요:
 
         {{
           "questions": [
             {{
               "question": "문제 내용",
-              "options": ["보기1", "보기2", "보기3", "보기4"],
-              "answer": 정답번호
+              "options": [
+                {{ "text": "보기1", "is_correct": false }},
+                {{ "text": "보기2", "is_correct": true }},
+                ...
+              ]
             }},
             ...
           ]
@@ -33,7 +37,7 @@ def generate_quiz_from_text(text: str) -> dict:
         내용:
         {text}
         """
-
+        
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
