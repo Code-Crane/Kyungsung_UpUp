@@ -1,5 +1,5 @@
 from .file import FileCreate, FileOut
-from .quiz import QuizRequest, QuizSubmission ,Quizout
+from .quiz import QuizRequest, QuizSubmission ,QuizOut
 
 __all__ = [
     "FileCreate",
