@@ -1,34 +1,32 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';  
+import { useRouter } from 'next/router';
 import styles from '../styles/loading.module.css';
 
 export default function LoadingPage() {
   const router = useRouter();
-  const { filename } = router.query;  
+  const { filename, file_id } = router.query;
 
   // 이미지 순환 상태 (1~3)
   const [imageIndex, setImageIndex] = useState(1);
 
-  // 이미지 순환 (0.5초마다 변경)
+  // 0.5초마다 이미지 교체
   useEffect(() => {
     const imgTimer = setInterval(() => {
       setImageIndex((prev) => (prev % 3) + 1);
     }, 500);
-
     return () => clearInterval(imgTimer);
   }, []);
 
   // 3초 후 QuizPage로 이동
   useEffect(() => {
-    if (filename) {
+    if (file_id && filename) {
       const timer = setTimeout(() => {
-        router.push(`/quiz?filename=${filename}`);
+        router.push(`/quiz?file_id=${file_id}&filename=${filename}`);
       }, 3000);
-
       return () => clearTimeout(timer);
     }
-  }, [filename, router]);  
+  }, [file_id, filename, router]);
 
   return (
     <div className={styles.loadingWrapper}>

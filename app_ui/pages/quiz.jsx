@@ -1,31 +1,29 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import QuizUI from '../components/QuizUI';
 import styles from '../styles/quiz.module.css';
 
 export default function QuizPage() {
-  const searchParams = useSearchParams();
-  // FileList에서 넘겨준 file_id
- const filename = searchParams.get('filename');
+  const router = useRouter();
+  const { file_id, filename } = router.query;
 
-  const [quizData, setQuizData]         = useState(null);
+  const [quizData, setQuizData] = useState(null);
   const [loadingIndex, setLoadingIndex] = useState(1);
-  const [showLoading, setShowLoading]   = useState(true);
+  const [showLoading, setShowLoading] = useState(true);
 
-  // 로딩 애니메이션 순환 (1,2,3 → 1…)
+  // 로딩 애니메이션 (1 → 2 → 3 순환)
   useEffect(() => {
     const iv = setInterval(() => {
-      setLoadingIndex(i => (i % 3) + 1);
+      setLoadingIndex((i) => (i % 3) + 1);
     }, 600);
     return () => clearInterval(iv);
   }, []);
 
-  // file_id 유효성 검사 & 퀴즈 데이터 호출
+  // file_id 기반 퀴즈 데이터 호출
   useEffect(() => {
-    // file_id 없으면 곧바로 로딩 종료
-    if (!fileId || fileId === 'null') {
+    if (!file_id) {
       setShowLoading(false);
       return;
     }
@@ -33,8 +31,8 @@ export default function QuizPage() {
     const fetchQuizData = async () => {
       const startTime = Date.now();
       try {
-        const query = new URLSearchParams({ filename }).toString();
-         const res = await fetch(`http://3.148.139.172:8000/api/v2/quiz?${query}`);
+        const query = new URLSearchParams({ file_id }).toString();
+        const res = await fetch(`http://3.148.139.172:8000/api/v2/quiz?${query}`);
         if (!res.ok) throw new Error('퀴즈 데이터를 불러올 수 없습니다');
 
         const { quiz } = await res.json();
@@ -53,7 +51,7 @@ export default function QuizPage() {
     };
 
     fetchQuizData();
-  }, [fileId]);
+  }, [file_id]);
 
   return (
     <div className={styles.quizPageWrapper}>
@@ -66,7 +64,6 @@ export default function QuizPage() {
           />
         </div>
       ) : quizData ? (
-        // QuizUI 쪽에서 URL의 filename 파라미터와 quizData.filename을 사용해 헤더를 표시하도록 구성
         <QuizUI quizData={quizData} />
       ) : (
         <div>퀴즈를 불러오지 못했습니다.</div>

@@ -9,23 +9,24 @@ export default function FileList() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // 업로드 후 URL에는 file_id가 없고, fileName·description만 전달됨
+  // URL에서 정보 읽기
   const folderName = searchParams.get('name') || '폴더 이름 없음';
-  const fileName = searchParams.get('file');
+  const fileName = searchParams.get('file');   // '파일 없음' 제거 (null 체크만)
   const description = searchParams.get('description') || '폴더 설명 없음';
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // 1) 파일 열기: filename 파라미터로 호출
+  // 파일 열기 (RESTful Path 방식)
   const handleOpenFile = async () => {
     if (!fileName) {
-      alert('퀴즈를 생성할 파일 정보가 없습니다.');
+      alert('파일 정보가 없습니다.');
       return;
     }
     setIsLoading(true);
     try {
       const res = await fetch(
-        `http://3.148.139.172:8000/api/v2/file/${fileName}`);
+        `http://3.148.139.172:8000/api/v2/file/${fileName}`
+      );
       if (!res.ok) throw new Error();
       const blob = await res.blob();
       window.open(URL.createObjectURL(blob), '_blank');
@@ -36,41 +37,47 @@ export default function FileList() {
     }
   };
 
+  // 퀴즈 생성 (file_id 기반)
   const handleGenerateQuiz = async () => {
-  console.log('[DEBUG] 퀴즈 생성 버튼 클릭됨');
-  console.log('[DEBUG] filename:', fileName);
+    console.log('[DEBUG] 퀴즈 생성 버튼 클릭됨');
+    console.log('[DEBUG] filename:', fileName);
 
-  if (!fileName) {
-    alert('퀴즈를 생성할 파일 정보가 없습니다.');
-    return;
-  }
-  setIsLoading(true);
-  try {
-    const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename: fileName }),
-    });
-    console.log(' [DEBUG] API 응답 상태:', res.status);
-
-    if (!res.ok) {
-      const text = await res.text();
-      console.error('generate API error:', res.status, text);
-      alert(`퀴즈 생성 API 오류: ${res.status}\n${text}`);
+    if (!fileName) {
+      alert('퀴즈를 생성할 파일 정보가 없습니다.');
       return;
     }
+    setIsLoading(true);
+    try {
+      const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: fileName }),
+      });
+      console.log('[DEBUG] API 응답 상태:', res.status);
 
-    await res.json();
-    const params = new URLSearchParams({ filename: fileName });
-    router.push(`/loading?${params.toString()}`);
-  } catch (err) {
-    console.error(' [DEBUG] fetch 오류:', err);
-    alert('퀴즈 생성 중 문제가 발생했습니다.');
-  } finally {
-    setIsLoading(false);
-  }
-};
+      if (!res.ok) {
+        const text = await res.text();
+        console.error('generate API error:', res.status, text);
+        alert(`퀴즈 생성 API 오류: ${res.status}\n${text}`);
+        return;
+      }
 
+      // file_id와 filename 받아오기
+      const { file_id } = await res.json();
+      const params = new URLSearchParams({
+        file_id: file_id.toString(),
+        filename: fileName,
+      });
+
+      // loading 페이지로 이동
+      router.push(`/loading?${params.toString()}`);
+    } catch (err) {
+      console.error('[DEBUG] fetch 오류:', err);
+      alert('퀴즈 생성 중 문제가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -89,7 +96,7 @@ export default function FileList() {
 
         <div className={styles.folderSection}>
           <div className={styles.folderCard}>
-            <h4>{fileName}</h4>
+            <h4>{fileName || '파일 없음'}</h4>
             <p>{description}</p>
             <div className={styles.cardButtons}>
               <button
