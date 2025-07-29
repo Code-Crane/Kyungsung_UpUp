@@ -9,3 +9,14 @@ class QuizRequest(BaseModel):
 class QuizSubmission(BaseModel):
     quiz_id: str
     answers: List[int]
+
+class QuizOption(BaseModel):
+    text: str
+    is_correct: bool
+
+class QuizItem(BaseModel):
+    question: str
+    options: List[QuizOption]
+
+class QuizOut(BaseModel):
+    quiz: List[QuizItem]
