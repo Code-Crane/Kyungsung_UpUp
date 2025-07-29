@@ -1,16 +1,17 @@
-# app_server/api/v1/endpoints/quiz.py
+# app_server/api/v2/endpoints/quiz.py
 
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from fastapi import Depends
 
-from app_server.schemas import QuizRequest, QuizSubmission
+from app_server.schemas import QuizRequest, QuizSubmission, QuizOut
 from app_server.services.quiz_service import generate_quiz, grade_quiz
 from app_server.core.database import get_db
 
+
 router = APIRouter()
 
-@router.post("/generate")
+@router.post("/generate", response_model=QuizOut)
 async def create_quiz(request: QuizRequest, db: Session = Depends(get_db)):
     try:
         quiz = generate_quiz(request.filename, db)
