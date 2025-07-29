@@ -6,4 +6,5 @@ __all__ = [
     "FileOut",
     "QuizRequest",
     "QuizSubmission",
+    "QuizOut"
 ]
