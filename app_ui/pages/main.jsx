@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UploadModal from '../components/FileUploader';
 import styles from '../styles/main.module.css';
 import Footer from '../components/Footer';
@@ -8,6 +8,23 @@ export default function Main() {
   const [folders, setFolders] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+
+  // 로컬스토리지에서 폴더 정보 로드
+  useEffect(() => {
+    const stored = localStorage.getItem('folders');
+    if (stored) {
+      try {
+        setFolders(JSON.parse(stored));
+      } catch {
+        setFolders([]);
+      }
+    }
+  }, []);
+
+  // 폴더 목록이 변경될 때마다 저장
+  useEffect(() => {
+    localStorage.setItem('folders', JSON.stringify(folders));
+  }, [folders]);
 
   const goToFileList = (folder) => {
     const query = new URLSearchParams({
