@@ -34,7 +34,7 @@ async def submit_quiz(submission: QuizSubmission, db: Session = Depends(get_db))
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-@router.get("")
+@router.get("/quiz")
 async def get_quiz_by_file_id(file_id: int = Query(...), db: Session = Depends(get_db)):
     try:
         # file_id 기반으로 DB에서 조회
