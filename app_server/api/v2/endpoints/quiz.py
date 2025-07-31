@@ -6,7 +6,9 @@ from fastapi import Depends
 
 from app_server.schemas import QuizRequest, QuizSubmission, QuizOut, QuizWithFileOut
 from app_server.services.quiz_service import generate_quiz, grade_quiz
+from app_server.services.gpt_client import generate_quiz_from_text
 from app_server.core.database import get_db
+from app_server.models.file import UploadedFile
 from fastapi import Query
 
 
