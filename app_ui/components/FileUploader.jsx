@@ -29,23 +29,21 @@ export default function UploadModal({ onClose, onCreate }) {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('lecture_name', name);
-      formData.append('description', desc);
 
       // uploadFile(formData) 호출 시 다음 형식의 응답을 기대합니다:
       // {
-      //   fileid: 123,
+      //   file_id: 123,
       //   filename: "uuid파일명.ext",
       //   text: "파일에서 추출된 텍스트",
       //   message: "업로드 및 저장 완료"
       // }
       const data = await uploadFile(formData);
 
-      // fileid → file_id로 매핑
       const newFolder = {
         name,
         description: desc,
         filename: data.filename,
-        file_id: data.fileid,
+        file_id: data.file_id,
         text: data.text,
       };
 

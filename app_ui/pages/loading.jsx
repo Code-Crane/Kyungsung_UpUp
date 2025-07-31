@@ -17,7 +17,7 @@ export default function LoadingPage() {
     return () => clearInterval(imgTimer);
   }, []);
 
-  // file_id 기반 퀴즈 데이터 호출 + 3초 후 이동
+  // file_id 기반 퀴즈 데이터 호출 후 이동
   useEffect(() => {
     if (!file_id) return;
 
@@ -32,10 +32,10 @@ export default function LoadingPage() {
         // sessionStorage에 quiz 데이터 저장
         sessionStorage.setItem('quizData', JSON.stringify(quiz));
 
-        // 3초 로딩 후 quiz 페이지로 이동
+        // 짧은 로딩 후 quiz 페이지로 이동
         setTimeout(() => {
           router.push(`/quiz?file_id=${file_id}&filename=${filename}`);
-        }, 3000);
+        }, 1000);
       } catch (err) {
         console.error('LoadingPage fetch error:', err);
       }
