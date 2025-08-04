@@ -47,7 +47,7 @@ project-root/
 │   │   │   ├── txt_extractor.py
 │   │   │   └── hwp_extractor.py
 │   ├── .env
-│   └── README.md                        
-├── requirements.txt             
+│   ├── requirements.txt 
+│   └── README.md                                    
 └── README.md
 ```
