@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../styles/Filelist.module.css';
+import styles from '../styles/loading.module.css';
 import Footer from '../components/Footer';
 
 export default function FileList() {
@@ -11,10 +12,20 @@ export default function FileList() {
 
   // URL에서 정보 읽기
   const folderName = searchParams.get('name') || '폴더 이름 없음';
-  const fileName = searchParams.get('file');   // '파일 없음' 제거 (null 체크만)
+  const fileName = searchParams.get('file'); // null이면 생성 불가
   const description = searchParams.get('description') || '폴더 설명 없음';
 
   const [isLoading, setIsLoading] = useState(false);
+  const [imageIndex, setImageIndex] = useState(1);
+
+  // 로딩 이미지 순환 (0.5초마다 변경) — 오버레이 표시 중에만 동작
+  useEffect(() => {
+    if (!isLoading) return;
+    const imgTimer = setInterval(() => {
+      setImageIndex((prev) => (prev % 3) + 1);
+    }, 500);
+    return () => clearInterval(imgTimer);
+  }, [isLoading]);
 
   // 파일 열기 (RESTful Path 방식)
   const handleOpenFile = async () => {
@@ -37,7 +48,7 @@ export default function FileList() {
     }
   };
 
-  // 퀴즈 생성 (file_id 기반)
+  // 퀴즈 생성 → 퀴즈 데이터 준비 → 퀴즈 페이지로 이동
   const handleGenerateQuiz = async () => {
     console.log('[DEBUG] 퀴즈 생성 버튼 클릭됨');
     console.log('[DEBUG] filename:', fileName);
@@ -46,41 +57,59 @@ export default function FileList() {
       alert('퀴즈를 생성할 파일 정보가 없습니다.');
       return;
     }
+
     setIsLoading(true);
     try {
-      const res = await fetch('http://3.148.139.172:8000/api/v2/generate', {
+      // 1) 퀴즈 생성: file_id 확보
+      const genRes = await fetch('http://3.148.139.172:8000/api/v2/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filename: fileName }),
       });
-      console.log('[DEBUG] API 응답 상태:', res.status);
+      console.log('[DEBUG] /generate 응답 상태:', genRes.status);
 
-      if (!res.ok) {
-        const text = await res.text();
-        console.error('generate API error:', res.status, text);
-        alert(`퀴즈 생성 API 오류: ${res.status}\n${text}`);
+      if (!genRes.ok) {
+        const text = await genRes.text();
+        console.error('generate API error:', genRes.status, text);
+        alert(`퀴즈 생성 API 오류: ${genRes.status}\n${text}`);
+        setIsLoading(false);
         return;
       }
 
-      // file_id와 filename 받아오기
-      const { file_id } = await res.json();
-      const params = new URLSearchParams({
-        file_id: file_id.toString(),
-        filename: fileName,
-      });
+      const { file_id } = await genRes.json();
 
-      // loading 페이지로 이동
-      router.push(`/loading?${params.toString()}`);
+      // 2) 퀴즈 데이터 가져오기
+      const query = new URLSearchParams({ file_id }).toString();
+      const quizRes = await fetch(
+        `http://3.148.139.172:8000/api/v2/quiz?${query}`
+      );
+      console.log('[DEBUG] /quiz 응답 상태:', quizRes.status);
+      if (!quizRes.ok) {
+        const text = await quizRes.text();
+        console.error('quiz API error:', quizRes.status, text);
+        alert(`퀴즈 로드 오류: ${quizRes.status}\n${text}`);
+        setIsLoading(false);
+        return;
+      }
+
+      const { quiz } = await quizRes.json();
+      // 3) 퀴즈 데이터 보관 (QuizPage에서 즉시 렌더)
+      sessionStorage.setItem('quizData', JSON.stringify(quiz));
+
+      // 4) 잠깐의 텀 후 퀴즈 페이지로 이동 (오버레이는 유지한 채 전환)
+      setTimeout(() => {
+        router.push(`/quiz?file_id=${file_id}&filename=${fileName}`);
+      }, 300);
     } catch (err) {
       console.error('[DEBUG] fetch 오류:', err);
       alert('퀴즈 생성 중 문제가 발생했습니다.');
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <div className={styles.wrapper}>
+      {/* 본문 */}
       <div className={styles.heroSection}>
         <h1 className={styles.heroTitle}>Learning Mate</h1>
         <p className={styles.heroSubtitle}>
@@ -119,6 +148,21 @@ export default function FileList() {
       </div>
 
       <Footer />
+
+      {/* 오버레이 로딩 UI */}
+      {isLoading && (
+        <div className={loadingStyles.loadingOverlay}>
+          <h2 className={loadingStyles.loadingText}>퀴즈를 준비 중입니다...</h2>
+          <p className={loadingStyles.loadingSubText}>
+            파일 분석 중이니 잠시만 기다려 주세요.
+          </p>
+          <img
+            src={`/image/loading_${imageIndex}.png`}
+            alt="로딩 중..."
+            className={loadingStyles.loadingImage}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,12 +1,13 @@
 /* styles/loading.module.css */
 
+/* ▼ 기존 전역 로딩 페이지용 */
 .loadingWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;           /* 화면 전체 세로 중앙 */
-  background-color: #ffffff; /* 필요시 색상 변경 가능 */
+  height: 100vh;
+  background-color: #ffffff;
   text-align: center;
 }
 
@@ -24,15 +25,31 @@
 }
 
 .loadingImage {
-  width: 120px;           /* 이미지 크기 */
+  width: 120px;
   height: 120px;
   object-fit: contain;
   animation: fadeInOut 0.5s ease-in-out infinite;
 }
 
-/* 0.5초마다 부드럽게 깜빡이는 효과 (이미지 전환 느낌 강화) */
+/* 0.5초마다 부드럽게 깜빡이는 효과 */
 @keyframes fadeInOut {
   0% { opacity: 0.4; }
   50% { opacity: 1; }
   100% { opacity: 0.4; }
+}
+
+/* ▼ 추가: FileList 화면 위에 덮는 반투명 오버레이 */
+.loadingOverlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 과 동일 */
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
