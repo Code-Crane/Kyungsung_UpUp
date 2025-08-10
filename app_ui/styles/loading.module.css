@@ -45,7 +45,7 @@
   width: 100%;
   height: 100%;
   background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(1px);  /*반투명 오버레이 흐림 조절*/
   z-index: 9999;
 
   display: flex;
