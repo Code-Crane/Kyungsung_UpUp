@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -167,6 +168,11 @@ export default function FileList() {
   );
 }
 
+
+
+// --------------------------------------------------------------------------------------
+
+
 // 아래는 로딩화면 테스트 코드입니다.(25/08/10)
 /*
 'use client';
@@ -306,7 +312,7 @@ export default function FileList() {
 
   return (
     <div className={styles.wrapper}>
-      {/* 상단 영역 */   /*}
+      {/* 상단 영역 */  /*}
       <div className={styles.heroSection}>
         <h1 className={styles.heroTitle}>Learning Mate</h1>
         <p className={styles.heroSubtitle}>
@@ -314,7 +320,7 @@ export default function FileList() {
         </p>
       </div>
 
-      {/* 실제 폴더/파일 카드 */   /*}
+      {/* 실제 폴더/파일 카드 */  /*}
       <div className={styles.grayBackground}>
         <div className={styles.folderHeaderOnly}>
           <h3>{folderName}</h3>
@@ -347,10 +353,6 @@ export default function FileList() {
 
       {SHOW_DEMO && (
         <div className={styles.grayBackground}>
-          <div className={styles.folderHeaderOnly}>
-            <h3>테스트 폴더</h3>
-            <p>로컬 더미 데이터로 흐름 테스트</p>
-          </div>
 
           <div className={styles.folderSection}>
             {DEMO_ITEMS.map((item) => (

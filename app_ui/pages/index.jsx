@@ -11,12 +11,23 @@ export default function Home() {
 
 
 // 테스트 파일리스트 페이지 렌더링
-// import FileList from './FileList.jsx';
+//import FileList from './FileList.jsx';
 
-// export default function Home() {
+//export default function Home() {
 //  return (
 //    <main>
 //      <FileList />
+//    </main>
+//  );
+//}
+
+
+// 테스트 퀴즈 페이지 렌더링
+//import QuizPage from './quiz.jsx';
+//export default function Home() {
+//  return (
+//    <main>
+//      <QuizPage/>
 //    </main>
 //  );
 //}
