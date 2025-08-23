@@ -1,3 +1,5 @@
+// 사용자가 파일을 업로드 하고 업로드한 파일들을 확인할 수 있는 파일리스트 페이지입니다.
+
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
@@ -6,9 +8,13 @@ import styles from "../styles/Filelist.module.css";
 import loadingStyles from "../styles/loading.module.css";
 import Footer from "../components/Footer";
 
+
+
 export default function FileList() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+
 
   // URL에서 정보 읽기
   const folderName = searchParams.get("name") || "폴더 이름 없음";
@@ -18,6 +24,8 @@ export default function FileList() {
   const [isLoading, setIsLoading] = useState(false);
   const [imageIndex, setImageIndex] = useState(1);
 
+
+
   // 로딩 이미지 순환 (0.5초마다 변경) — 오버레이 표시 중에만 동작
   useEffect(() => {
     if (!isLoading) return;
@@ -26,6 +34,8 @@ export default function FileList() {
     }, 500);
     return () => clearInterval(imgTimer);
   }, [isLoading]);
+
+
 
   // 파일 열기 (RESTful Path 방식)
   const handleOpenFile = async () => {
@@ -48,15 +58,20 @@ export default function FileList() {
     }
   };
 
+
+
   // 퀴즈 생성 → 퀴즈 데이터 준비 → 퀴즈 페이지로 이동
   const handleGenerateQuiz = async () => {
     console.log("[DEBUG] 퀴즈 생성 버튼 클릭됨");
     console.log("[DEBUG] filename:", fileName);
 
+    // 파일 정보 없을 시 출력될 모달창
     if (!fileName) {
       alert("퀴즈를 생성할 파일 정보가 없습니다.");
       return;
     }
+
+
 
     setIsLoading(true);
     try {
@@ -78,11 +93,14 @@ export default function FileList() {
 
       const { file_id } = await genRes.json();
 
+
+
       // 2) 퀴즈 데이터 가져오기
       const query = new URLSearchParams({ file_id }).toString();
       const quizRes = await fetch(
         `http://3.148.139.172:8000/api/v2/quiz?${query}`
       );
+
       console.log("[DEBUG] /quiz 응답 상태:", quizRes.status);
       if (!quizRes.ok) {
         const text = await quizRes.text();
@@ -93,13 +111,19 @@ export default function FileList() {
       }
 
       const { quiz } = await quizRes.json();
+
+
       // 3) 퀴즈 데이터 보관 (QuizPage에서 즉시 렌더)
       sessionStorage.setItem("quizData", JSON.stringify(quiz));
+
+
 
       // 4) 잠깐의 텀 후 퀴즈 페이지로 이동 (오버레이는 유지한 채 전환)
       setTimeout(() => {
         router.push(`/quiz?file_id=${file_id}&filename=${fileName}`);
       }, 300);
+
+      // 오류발생 시 모달창 출력
     } catch (err) {
       console.error("[DEBUG] fetch 오류:", err);
       alert("퀴즈 생성 중 문제가 발생했습니다.");
@@ -107,8 +131,11 @@ export default function FileList() {
     }
   };
 
+
+// 파일리스트 페이지 상단 내용
   return (
     <div className={styles.wrapper}>
+
       {/* 본문 */}
       <div className={styles.heroSection}>
         <h1 className={styles.heroTitle}>Learning Mate</h1>
@@ -136,14 +163,18 @@ export default function FileList() {
                 onClick={handleOpenFile}
                 disabled={isLoading}
               >
-                {isLoading ? "로딩 중..." : "파일 열기"}
+                {/*로딩 중일 때, '파일 열기'를 '로딩 중...'으로 변경*/}
+                {isLoading ? '로딩 중...' : '파일 열기'} 
+
               </button>
               <button
                 className={styles.yellowButton}
                 onClick={handleGenerateQuiz}
                 disabled={isLoading}
               >
+                {/*로딩 중일 때, '퀴즈 생성'을 '퀴즈 생성 중...'으로 변경*/}
                 {isLoading ? "퀴즈 생성 중..." : "퀴즈 생성"}
+
               </button>
             </div>
           </div>
@@ -152,7 +183,10 @@ export default function FileList() {
 
       <Footer />
 
-      {/* 오버레이 로딩 UI - 효과는 styles의 loading.module.css에 있습니다. */}
+
+
+
+      {/* 로딩 UI화면 설정 - 효과는 styles의 loading.module.css에 있습니다. */}
       {isLoading && (
         <div className={loadingStyles.loadingOverlay}>
           <h2 className={loadingStyles.loadingText}>퀴즈를 준비 중입니다...</h2>

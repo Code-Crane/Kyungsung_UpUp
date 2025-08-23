@@ -1,4 +1,4 @@
-// QuizUI.jsx
+// 퀴즈 페이지의 전반적인 기능을 담당하는 컴포넌트입니다.
 
 'use client';
 
@@ -49,6 +49,7 @@ export default function QuizUI({ quizData }) {
       setGraded(true);
       setExplanationIndex(selected);
 
+      // 문제의 정/오답 여부에 따른 경성이 이미지 출력
       const isCorrect = options[selected].is_correct;
       const imagePath = isCorrect
         ? '/image/KsYEE_YES.png'

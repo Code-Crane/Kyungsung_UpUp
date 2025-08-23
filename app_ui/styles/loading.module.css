@@ -1,6 +1,6 @@
-/* styles/loading.module.css */
+/*로딩화면 스타일 지정*/
 
-/* ▼ 기존 전역 로딩 페이지용 */
+
 .loadingWrapper {
   display: flex;
   flex-direction: column;
