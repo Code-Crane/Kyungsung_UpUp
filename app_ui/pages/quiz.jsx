@@ -1,3 +1,5 @@
+// 서버로 사용자가 업로드한 파일을 보내고 프롬프트를 통해 퀴즈를 요청 및 응답 받아옵니다.
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -21,6 +23,7 @@ export default function QuizPage() {
 
     if (!file_id) return;
 
+    //퀴즈 데이터 호출 및 받아오기(오류시 모달창 출력)
     const fetchQuiz = async () => {
       try {
         const query = new URLSearchParams({ file_id }).toString();
@@ -37,6 +40,7 @@ export default function QuizPage() {
     fetchQuiz();
   }, [file_id]);
 
+  //퀴즈 데이터 호출 오류시 출력
   return (
     <div className={styles.quizPageWrapper}>
       {quizData ? (

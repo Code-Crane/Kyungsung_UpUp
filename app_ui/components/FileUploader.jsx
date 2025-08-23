@@ -1,3 +1,5 @@
+// 사용자의 파일을 업로드 할 수 있는 모달창 컴포넌트입니다.
+
 import { useState } from 'react';
 import styles from '../styles/FileUploader.module.css';
 import { uploadFile } from '../utils/api'; // API 헬퍼
@@ -8,17 +10,20 @@ export default function UploadModal({ onClose, onCreate }) {
   const [file, setFile]         = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB
+  const MAX_FILE_SIZE = 30 * 1024 * 1024; // 최대 파일용량 설정(30MB)
 
+  //파일명 미지정시 출력
   const handleSubmit = async () => {
     if (!name.trim()) {
       alert('폴더 이름을 입력해주세요.');
       return;
     }
+    //파일 미첨부시 출력
     if (!file) {
       alert('파일을 첨부해주세요.');
       return;
     }
+    // 최대 파일크기 초과시 출력
     if (file.size > MAX_FILE_SIZE) {
       alert('30MB 이하의 파일만 업로드할 수 있습니다.');
       return;
@@ -37,8 +42,10 @@ export default function UploadModal({ onClose, onCreate }) {
       //   text: "파일에서 추출된 텍스트",
       //   message: "업로드 및 저장 완료"
       // }
+
       const data = await uploadFile(formData);
 
+      // 사용자가 생성할 폴더가 담고있는 내용
       const newFolder = {
         name,
         description: desc,
@@ -49,7 +56,10 @@ export default function UploadModal({ onClose, onCreate }) {
 
       onCreate(newFolder);
       onClose();
-    } catch (err) {
+
+    } 
+    // 파일 업로드 오류시 출력
+    catch (err) {
       console.error('파일 업로드 오류:', err);
       alert('파일 업로드에 실패했습니다.');
     } finally {
@@ -57,6 +67,8 @@ export default function UploadModal({ onClose, onCreate }) {
     }
   };
 
+  // 사용자가 폴더를 생성할 때 입력할 내용구성
+  // 폴더명/폴더설명/파일첨부로 구성되어있습니다.
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -100,6 +112,7 @@ export default function UploadModal({ onClose, onCreate }) {
           * 파일은 최대 30MB까지 첨부 가능합니다.
         </p>
 
+        {/*폴더생성 및 취소 버튼 지정*/}
         <div>
           <button
             onClick={handleSubmit}

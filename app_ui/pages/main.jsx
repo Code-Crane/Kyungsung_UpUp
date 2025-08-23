@@ -1,3 +1,5 @@
+// 메인 페이지
+
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import UploadModal from "../components/FileUploader";
@@ -41,6 +43,7 @@ export default function Main() {
     }
   };
 
+  // 메인 페이지 상단 내용
   return (
     <div className={styles.wrapper}>
       <div className={styles.heroSection}>
@@ -65,11 +68,12 @@ export default function Main() {
           <p>생성된 폴더를 확인하고 학습을 시작해보세요!</p>
         </div>
 
+        {/*생성된 폴더의 폴더명 및 아이콘 설정*/}
         {folders.length === 0 ? (
           <div className={styles.emptyState}>
             <img
-              src="/image/ks_logo2.png"
-              alt="아직 폴더가 없습니다"
+              src="/image/ks_logo2.png" // 폴더 아이콘
+              alt="아직 폴더가 없습니다"   // 폴더명 기본값
               className={styles.emptyImage}
             />
           </div>
@@ -94,7 +98,7 @@ export default function Main() {
                   <p>{folder.description || "설명이 없습니다."}</p>
                   <span>생성일: {new Date().toISOString().split("T")[0]}</span>
                   <button
-                    className={styles.deleteButton} // 임시 삭제 버튼.
+                    className={styles.deleteButton} // 삭제 버튼.
                     onClick={(e) => removeFolder(index, e)}
                   >
                     삭제
