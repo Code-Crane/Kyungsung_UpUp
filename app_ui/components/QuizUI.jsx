@@ -13,7 +13,9 @@ export default function QuizUI({ quizData }) {
   // URL에 ?filename=… 으로 넘겨준 값 우선, 없으면 quizData.filename, 없으면 '파일명 없음'
   const urlFilename = searchParams.get('filename');
   const { filename: dataFilename = '' } = quizData[0] || {};
-  const displayFilename = urlFilename || dataFilename || '파일명 없음';
+  const rawFilename = urlFilename || dataFilename;
+  const displayFilename =
+    (rawFilename && rawFilename.split("_").slice(1).join("_")) || "파일명 없음";
 
   // grading state
   const [selected, setSelected] = useState(null);

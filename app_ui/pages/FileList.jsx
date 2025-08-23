@@ -1,13 +1,12 @@
 // 사용자가 파일을 업로드 하고 업로드한 파일들을 확인할 수 있는 파일리스트 페이지입니다.
 
+"use client";
 
-'use client';
-
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import styles from '../styles/Filelist.module.css';
-import loadingStyles from '../styles/loading.module.css';
-import Footer from '../components/Footer';
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "../styles/Filelist.module.css";
+import loadingStyles from "../styles/loading.module.css";
+import Footer from "../components/Footer";
 
 
 
@@ -18,9 +17,9 @@ export default function FileList() {
 
 
   // URL에서 정보 읽기
-  const folderName = searchParams.get('name') || '폴더 이름 없음';
-  const fileName = searchParams.get('file'); // null이면 생성 불가
-  const description = searchParams.get('description') || '폴더 설명 없음';
+  const folderName = searchParams.get("name") || "폴더 이름 없음";
+  const fileName = searchParams.get("file"); // null이면 생성 불가
+  const description = searchParams.get("description") || "폴더 설명 없음";
 
   const [isLoading, setIsLoading] = useState(false);
   const [imageIndex, setImageIndex] = useState(1);
@@ -41,7 +40,7 @@ export default function FileList() {
   // 파일 열기 (RESTful Path 방식)
   const handleOpenFile = async () => {
     if (!fileName) {
-      alert('파일 정보가 없습니다.');
+      alert("파일 정보가 없습니다.");
       return;
     }
     setIsLoading(true);
@@ -51,9 +50,9 @@ export default function FileList() {
       );
       if (!res.ok) throw new Error();
       const blob = await res.blob();
-      window.open(URL.createObjectURL(blob), '_blank');
+      window.open(URL.createObjectURL(blob), "_blank");
     } catch {
-      alert('파일 열기 중 문제가 발생했습니다.');
+      alert("파일 열기 중 문제가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -63,12 +62,12 @@ export default function FileList() {
 
   // 퀴즈 생성 → 퀴즈 데이터 준비 → 퀴즈 페이지로 이동
   const handleGenerateQuiz = async () => {
-    console.log('[DEBUG] 퀴즈 생성 버튼 클릭됨');
-    console.log('[DEBUG] filename:', fileName);
+    console.log("[DEBUG] 퀴즈 생성 버튼 클릭됨");
+    console.log("[DEBUG] filename:", fileName);
 
     // 파일 정보 없을 시 출력될 모달창
     if (!fileName) {
-      alert('퀴즈를 생성할 파일 정보가 없습니다.');
+      alert("퀴즈를 생성할 파일 정보가 없습니다.");
       return;
     }
 
@@ -77,16 +76,16 @@ export default function FileList() {
     setIsLoading(true);
     try {
       // 1) 퀴즈 생성: file_id 확보
-      const genRes = await fetch('http://3.148.139.172:8000/api/v2/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const genRes = await fetch("http://3.148.139.172:8000/api/v2/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ filename: fileName }),
       });
-      console.log('[DEBUG] /generate 응답 상태:', genRes.status);
+      console.log("[DEBUG] /generate 응답 상태:", genRes.status);
 
       if (!genRes.ok) {
         const text = await genRes.text();
-        console.error('generate API error:', genRes.status, text);
+        console.error("generate API error:", genRes.status, text);
         alert(`퀴즈 생성 API 오류: ${genRes.status}\n${text}`);
         setIsLoading(false);
         return;
@@ -102,10 +101,10 @@ export default function FileList() {
         `http://3.148.139.172:8000/api/v2/quiz?${query}`
       );
 
-      console.log('[DEBUG] /quiz 응답 상태:', quizRes.status);
+      console.log("[DEBUG] /quiz 응답 상태:", quizRes.status);
       if (!quizRes.ok) {
         const text = await quizRes.text();
-        console.error('quiz API error:', quizRes.status, text);
+        console.error("quiz API error:", quizRes.status, text);
         alert(`퀴즈 로드 오류: ${quizRes.status}\n${text}`);
         setIsLoading(false);
         return;
@@ -115,7 +114,7 @@ export default function FileList() {
 
 
       // 3) 퀴즈 데이터 보관 (QuizPage에서 즉시 렌더)
-      sessionStorage.setItem('quizData', JSON.stringify(quiz));
+      sessionStorage.setItem("quizData", JSON.stringify(quiz));
 
 
 
@@ -126,8 +125,8 @@ export default function FileList() {
 
       // 오류발생 시 모달창 출력
     } catch (err) {
-      console.error('[DEBUG] fetch 오류:', err);
-      alert('퀴즈 생성 중 문제가 발생했습니다.');
+      console.error("[DEBUG] fetch 오류:", err);
+      alert("퀴즈 생성 중 문제가 발생했습니다.");
       setIsLoading(false);
     }
   };
@@ -153,7 +152,10 @@ export default function FileList() {
 
         <div className={styles.folderSection}>
           <div className={styles.folderCard}>
-            <h4>{fileName || '파일 없음'}</h4>
+            <h4>
+              {(fileName && fileName.split("_").slice(1).join("_")) ||
+                "파일 없음"}
+            </h4>
             <p>{description}</p>
             <div className={styles.cardButtons}>
               <button
@@ -163,6 +165,7 @@ export default function FileList() {
               >
                 {/*로딩 중일 때, '파일 열기'를 '로딩 중...'으로 변경*/}
                 {isLoading ? '로딩 중...' : '파일 열기'} 
+
               </button>
               <button
                 className={styles.yellowButton}
@@ -170,7 +173,8 @@ export default function FileList() {
                 disabled={isLoading}
               >
                 {/*로딩 중일 때, '퀴즈 생성'을 '퀴즈 생성 중...'으로 변경*/}
-                {isLoading ? '퀴즈 생성 중...' : '퀴즈 생성'}  
+                {isLoading ? "퀴즈 생성 중..." : "퀴즈 생성"}
+
               </button>
             </div>
           </div>
@@ -198,12 +202,9 @@ export default function FileList() {
       )}
     </div>
   );
-}
-
-
+} /*}
 
 // --------------------------------------------------------------------------------------
-
 
 // 아래는 로딩화면 테스트 코드입니다.(25/08/10)
 /*
@@ -344,15 +345,17 @@ export default function FileList() {
 
   return (
     <div className={styles.wrapper}>
-      {/* 상단 영역 */  /*}
-      <div className={styles.heroSection}>
-        <h1 className={styles.heroTitle}>Learning Mate</h1>
-        <p className={styles.heroSubtitle}>
-          선택한 폴더의 파일을 확인하고 퀴즈를 생성해보세요!
-        </p>
-      </div>
+      {/* 상단 영역 */
+<div className={styles.heroSection}>
+  <h1 className={styles.heroTitle}>Learning Mate</h1>
+  <p className={styles.heroSubtitle}>
+    선택한 폴더의 파일을 확인하고 퀴즈를 생성해보세요!
+  </p>
+</div>;
 
-      {/* 실제 폴더/파일 카드 */  /*}
+{
+  /* 실제 폴더/파일 카드 */
+  /*}
       <div className={styles.grayBackground}>
         <div className={styles.folderHeaderOnly}>
           <h3>{folderName}</h3>
@@ -430,3 +433,4 @@ export default function FileList() {
   );
 }
 */
+}
