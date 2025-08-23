@@ -1,6 +1,5 @@
 // 푸터내용 구성(목업 데이터)
 
-
 import styles from '../styles/footer.module.css';
 
 export default function Footer() {
