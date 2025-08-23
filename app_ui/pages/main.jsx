@@ -1,4 +1,4 @@
-// 메인 페이지
+// 메인 페이지입니다.
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -11,6 +11,7 @@ export default function Main() {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
+
   // 로컬스토리지에서 폴더 정보 로드
   useEffect(() => {
     const stored = localStorage.getItem("folders");
@@ -22,6 +23,7 @@ export default function Main() {
       }
     }
   }, []);
+
 
   // 폴더 목록이 변경될 때마다 저장
   useEffect(() => {

@@ -12,13 +12,13 @@ export default function UploadModal({ onClose, onCreate }) {
 
   const MAX_FILE_SIZE = 30 * 1024 * 1024; // 최대 파일용량 설정(30MB)
 
-  //파일명 미지정시 출력
+  // 파일명 미지정시 출력
   const handleSubmit = async () => {
     if (!name.trim()) {
       alert('폴더 이름을 입력해주세요.');
       return;
     }
-    //파일 미첨부시 출력
+    // 파일 미첨부시 출력
     if (!file) {
       alert('파일을 첨부해주세요.');
       return;
