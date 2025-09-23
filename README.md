@@ -1,10 +1,15 @@
 # [팀 어푸어푸]-러닝메이트 프로젝트
 <img src="https://github.com/Code-Crane/Kyungsung_UpUp/blob/main/img/leadimage.png" width="600px" height="500" alt="썸네일이미지"/>
 
-### 프로젝트 개요
+> <b>다양한 학습 자료를 업로드하고 퀴즈 풀이를 통해 성장하세요!</b><br>
+> <b>여러분의 든든한 '러닝메이트'가 되어드립니다!</b><br>
+
+
+## 프로젝트 개요
 - 학생들의 학습도우미 웹앱을 개발합니다.
 - 사전에 정의된 프롬프트를 통해 업로드된 자료를 바탕으로 퀴즈를 생성합니다.
 - 추가적인 학습이 필요한 내용을 선택적으로 학습하고 관리합니다.
+
 
 ## 프로젝트 기간
 
@@ -12,12 +17,14 @@
 - **종료일** : 2025년 8월 21일 (목)
 - **총 기간** : 약 5개월
 
+
 ## 팀원 소개
 
 |                                프론트엔드(PM)                              |                                  백엔드(서버&API)                         |                              백엔드(DB)                              |                              
 | :-------------------------------------------------------------------: | :----------------------------------------------------------------------: | :-------------------------------------------------------------------:| 
 | <img src="https://github.com/WSIDFY.png" width="100px" alt="김민재"/> | <img src="https://github.com/Code-Crane.png" width="100px" alt="김민성"/> | <img src="https://github.com/Haleluya777.png" width="100px" alt="장민재"/> |
 |                  [김민재](https://github.com/WSIDFY)                  |                  [김민성](https://github.com/Code-Crane)                  |                  [장민재](https://github.com/Haleluya777)                  |        
+
 
 ## 주요 기능
 
@@ -41,6 +48,7 @@
 - 파일의 내용을 바탕으로 생성된 문제 제공
 - 항목별 정/오답 구분 및 채점기능 제공
 
+
 ## 사용 스택
 
 Frontend : React, Tailwind CSS  
@@ -48,6 +56,7 @@ Backend : Python, GPT API, Swagger
 Database : MySQL  
 Deploy : Vercel VO(프론트) 
 기타 : Git, GitHub, Figma, Discord, Slack
+
 
 ## 트러블 슈팅 상세 보기
 
@@ -67,6 +76,7 @@ Deploy : Vercel VO(프론트)
 대기
 
 </details>
+
 
 ## 📌 향후 계획
 
@@ -162,6 +172,7 @@ project-root/
 │   └── README.md                                    
 └── README.md
 ```
+
 
 ## 어푸어푸 - 팀 대표이미지
 <img src="https://github.com/Code-Crane/Kyungsung_UpUp/blob/main/img/UPUP.jpg" width="400px" height="400" alt="UPUP"/>
