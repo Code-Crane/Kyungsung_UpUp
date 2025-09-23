@@ -101,7 +101,7 @@ Deploy : Vercel VO(프론트)
 <img src="https://github.com/Code-Crane/Kyungsung_UpUp/blob/main/img/quizyes.png" width="600px" height="500" alt="정답선택"/>
 <img src="https://github.com/Code-Crane/Kyungsung_UpUp/blob/main/img/quizno.png" width="600px" height="500" alt="오답선택"/>
 
-## 예외(에러) 처리
+#### [예외(에러) 처리]
 <img src="https://github.com/Code-Crane/Kyungsung_UpUp/blob/main/img/addfileerr.png" width="600px" height="500" alt="파일업로드에러"/>
 <img src="https://github.com/Code-Crane/Kyungsung_UpUp/blob/main/img/fordernameerr.png" width="600px" height="500" alt="폴더명에러"/>
 <img src="https://github.com/Code-Crane/Kyungsung_UpUp/blob/main/img/quizcallerr.png" width="600px" height="500" alt="퀴즈불러오기실패"/>
